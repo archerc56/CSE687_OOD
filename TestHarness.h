@@ -10,10 +10,9 @@ public:
 						HIGH: detailed debugging output that includes, on failure, values of application specific variables, 
 						      and an optional time-date stamp
 					     */
+	void setLogLevel(LogLevel logLevel); //Sets the log level for the test Harness
 	
 	void execute(function<bool()> callable); //executes a callable at the set log level
-	
-	void setLogLevel(LogLevel logLevel); //Sets the log level for the test Harness
 
 	void execute(list<function<bool()>> callables); //Executes a sequenece of callables at the set log level
 
