@@ -21,7 +21,6 @@ void TestHarness::Executor(std::list<function<void()>> callables)
 
 }
 
-
 void TestHarness::log(int)
 {
 
