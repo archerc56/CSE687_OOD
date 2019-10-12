@@ -25,7 +25,6 @@ Notes:
 #include <vector>
 #include <sstream>
 
-template <typename Callable>
 class TestHarness
 {
 public:
@@ -39,8 +38,11 @@ public:
 
 	void setLogLevel(LogLevel logLevel);				//Sets the log level for the test Harness
 	void Executor(std::function<void()>);		//executes a callable at the set log level
+	
+	template <typename Callable>
 	void Executor(Callable&);
 	//void Executor(std::list<function<void()>>);//Executes a sequenece of callables at the set log level
+	
 	void log(int);				//takes int arguement, 1 or 0 for pass or fail
 	std::string to_String();	//pretty much the getter for report
 	void add_Test_to_Suite();	//adds test case to testsuite
