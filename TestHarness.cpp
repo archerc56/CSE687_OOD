@@ -11,7 +11,7 @@ void TestHarness::Executor(std::function<void()> callable)
 }
 
 template <typename Callable>
-void TestHarness::Executor(Callable& co)
+void TestHarness<Callable>::Executor(Callable& co)
 {
 	
 }
