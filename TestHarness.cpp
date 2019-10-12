@@ -1,3 +1,5 @@
+//Last Update: October 12, 2019 @ 12:42 AM Central Time
+
 #include "TestHarness.h"
 
 void TestHarness::setLogLevel(LogLevel logLevel)
