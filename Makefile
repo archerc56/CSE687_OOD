@@ -4,7 +4,7 @@
 
 CXXFLAGS = -g -Wall -Wfatal-errors -std=c++14
 
-ALL = testHarness
+ALL = TestHarness
 
 all: $(ALL)
 
