@@ -20,6 +20,8 @@ Notes:
 
 
 //**************************************************************************************************************************/
+#ifndef TEST_HARNESS_H
+#define TEST_HARNESS_H
 #include <list>
 #include <functional>
 #include <vector>
@@ -61,3 +63,4 @@ private:
 	//----Test DATA-------
 	//--------------------
 };
+#endif
