@@ -8,7 +8,7 @@ divisonExecutable : main.o TestHarness.o
 #-----------------------------------------------------------------
 # But main.o is not there? So specify how it is produced.
 main.o : main.cpp TestHarness.h
-    g++ -c main.cpp
+	g++ -c main.cpp
 # Same for test.o
 TestHarness.o : TestHarness.cpp TestHarness.h
-    g++ -c TestHarness.cpp
+	g++ -c TestHarness.cpp
