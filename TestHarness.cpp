@@ -1,44 +1,67 @@
-//Last Update: October 12, 2019 @ 12:42 AM Central Time
-
 #include "TestHarness.h"
+
+TestHarness::TestHarness()
+{
+	
+}
+TestHarness::~TestHarness()
+{
+
+}
 
 void TestHarness::setLogLevel(LogLevel logLevel)
 {
 
 }
-				
-void TestHarness::Executor(std::function<void()> callable)
-{
 
+void TestHarness::execute()
+{
+	for (auto &i : this->TestSuite)
+	{
+		try
+		{
+			i();
+			log(1);
+		}
+		catch (/*std::bad_alloc & ba*/ ...)
+		{
+			log(0);
+		}
+	}
 }
 
-template <typename Callable>
-void TestHarness<Callable>::Executor(Callable& co)
+
+void TestHarness::log(bool pass)
 {
-	
+	std::string logString;
+
+	if (pass)
+	{
+		logString = "pass";
+	}
+	else if (!pass)
+	{
+		logString = "fail";
+	}
+
+	report << logString << std::endl;
 }
-		
-void TestHarness::Executor(std::list<function<void()>> callables)
-{
 
-}
-
-void TestHarness::log(int)
-{
-
-}			
 
 std::string TestHarness::to_String()
 {
-
+	std::string returnString = this->report.str();
+	return returnString;
 }
-	
-void TestHarness::add_Test_to_Suite()
+
+
+void TestHarness::add_Test_to_Suite(std::function<void()> callable)
 {
 
+	TestSuite.push_back(callable);
 }
-	
+
 void TestHarness::reset_TestSuite()
 {
-
+	this->TestSuite.clear();
 }
