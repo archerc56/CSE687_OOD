@@ -12,19 +12,18 @@ int main()
 	
 	TestHarness th;
 
-	th.add_Test_to_Suite(test_Bad_Alloc);
+	th.AddTestToSuite(test_Bad_Alloc);
 
     Functor F;
 	//F();
-	th.add_Test_to_Suite(F);
+	th.AddTestToSuite(F);
 
-	th.execute();
+	th.Executor();
 
-	std::cout << th.to_String();
+	std::cout << th.ToString();
 
 	return 0;
 }
-
 
 bool test_Bad_Alloc()
 {

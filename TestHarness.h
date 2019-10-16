@@ -30,21 +30,19 @@ public:
 														and an optional time-date stamp
 														*/
 
-	void setLogLevel(LogLevel logLevel);				//Sets the log level for the test Harness
-	void execute();										//executes a callable at the set log level
+	void SetLogLevel(LogLevel logLevel);				//Sets the log level for the test Harness
+	void Executor();										//executes a callable at the set log level
 
-	std::string to_String();							//pretty much the getter for report
-	void log(bool pass);								//logs the result
+	std::string ToString();							//pretty much the getter for report
+	void Log(bool pass);								//logs the result
 	template <typename Callable>
-	void add_Test_to_Suite(Callable& co);					//adds the test case to testsuite
+	void AddTestToSuite(Callable& co);					//adds the test case to testsuite
 
-	void add_Test_to_Suite(std::function<bool()> callable);	//adds test case to testsuite
-	void reset_TestSuite();									//resets the test suite
+	void AddTestToSuite(std::function<bool()> callable);	//adds test case to testsuite
+	void ResetTestSuite();									//resets the test suite
 
 private:
 	LogLevel logLevel = HIGH;
 	std::vector<std::function<bool()>> TestSuite;	//group of function pointers
-	std::stringstream report;						//final report of all passes and fails.  when log() is called this string is appended	
-
-
+	std::stringstream report;						//final report of all passes and fails.  when log() is called this string is appended
 };

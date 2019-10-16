@@ -9,12 +9,12 @@ TestHarness::~TestHarness()
 
 }
 
-void TestHarness::setLogLevel(LogLevel logLevel)
+void TestHarness::SetLogLevel(LogLevel logLevel)
 {
 
 }
 
-void TestHarness::execute()
+void TestHarness::Executor()
 {
 	for (auto &i : this->TestSuite)
 	{
@@ -31,7 +31,7 @@ void TestHarness::execute()
 }
 
 //NOTE: log function might need to take in more parameters, such as start/end times, and error messages
-void TestHarness::log(bool pass)
+void TestHarness::Log(bool pass)
 {
 	std::string logString;
 	if(logLevel == LogLevel::LOW){
@@ -51,32 +51,27 @@ void TestHarness::log(bool pass)
 	else{
 		//TODO: log start and end time as well as error messages
 	}
-	
-
 	report << logString << std::endl;
 }
 
-
-std::string TestHarness::to_String()
+std::string TestHarness::ToString()
 {
 	std::string returnString = this->report.str();
 	return returnString;
 }
 
-
-void TestHarness::add_Test_to_Suite(std::function<bool()> callable)
+void TestHarness::AddTestToSuite(std::function<bool()> callable)
 {
 	TestSuite.push_back(callable);
 }
 
 template <typename Callable>
-void TestHarness::add_Test_to_Suite(Callable& co)
+void TestHarness::AddTestToSuite(Callable& co)
 {
 	TestSuite.push_back(co);
 }
 
-
-void TestHarness::reset_TestSuite()
+void TestHarness::ResetTestSuite()
 {
 	this->TestSuite.clear();
 }
