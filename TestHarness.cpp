@@ -99,7 +99,7 @@ bool TestBadAlloc();
 bool TestBadCast();
 void TestBadException();
 bool TestBadTypeID();
-void TestBadFunctionCall();
+bool TestBadFunctionCall();
 bool TestBadWeakPtr();
 
 int main()
@@ -111,6 +111,7 @@ int main()
 	th.AddTestToSuite(TestBadCast);
     th.AddTestToSuite(TestBadTypeID);
     th.AddTestToSuite(TestBadWeakPtr);
+    th.AddTestToSuite(TestBadFunctionCall);
 
     Functor F;
 	//F();
@@ -129,6 +130,7 @@ int main()
 bool TestBadAlloc()
 {
     std::bad_alloc x;
+    std::cout << "TestBadAlloc \n";
     while (true)
     {
         new int [100000000ul];
@@ -144,6 +146,7 @@ bool TestBadAlloc()
 bool TestBadCast()
 {
     std::bad_cast e;
+    std::cout << "TestBadCast \n";
     Base b;
     Derived & rd = dynamic_cast<Derived&>(b);
 
@@ -166,6 +169,7 @@ void TestBadException()
 bool TestBadTypeID()
 {
     std::bad_typeid e;
+    std::cout << "TestBadTypeID \n";
     BadStruct * ptr = nullptr;
     std::cout << typeid(*ptr).name() << '\n';
 
@@ -176,8 +180,16 @@ bool TestBadTypeID()
 /**
  * 
  */
-void TestBadFunctionCall()
+bool TestBadFunctionCall()
 {
+    std::bad_function_call e;
+    std::cout << "TestBadFunctionCall \n";
+    std::function<int()> TestBadFunction = nullptr;
+    TestBadFunction();
+
+    throw e;
+    return true;
+    
 
 }
 
@@ -187,6 +199,9 @@ void TestBadFunctionCall()
 bool TestBadWeakPtr()
 {
     std::bad_weak_ptr e;
+
+    std::cout << "TestBadWeakPtr \n";
+
     std::shared_ptr<int> p1(new int(100));
     std::weak_ptr<int> wp(p1);
     p1.reset();
