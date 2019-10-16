@@ -24,11 +24,11 @@ void TestHarness::Executor()
 		try
 		{
 			i();
-			log(1);
+			Log(1);
 		}
 		catch (/*std::bad_alloc & ba*/ ...)
 		{
-			log(0);
+			Log(0);
 		}
 	}
 }
