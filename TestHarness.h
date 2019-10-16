@@ -16,7 +16,6 @@ Notes:
 #include <iostream>
 #include "Functor.cpp"
 
-
 class TestHarness
 {
 public:
@@ -37,6 +36,6 @@ public:
 	void ResetTestSuite();									//resets the test suite
 private:
 	LogLevel logLevel = HIGH;
-	std::vector<std::function<bool()>> TestSuite;	//group of function pointers
+	std::vector<std::function<bool()>> TestSuite;	//vector of callable objects
 	std::stringstream report;						//final report of all passes and fails.  when log() is called this string is appended
 };
