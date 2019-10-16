@@ -13,54 +13,83 @@ TestHarness::~TestHarness()
 
 }
 
-void TestHarness::SetLogLevel(LogLevel logLevel)
+void TestHarness::SetLogLevel(LogLevel newLogLevel)
 {
-
+	logLevel = newLogLevel;
 }
 
 void TestHarness::Executor()
 {
+	int testNum = 1;
 	for (auto &i : this->TestSuite) //iterate through TestSuite vector contents
 	{
+		float x,y;
+		clock_t startTime = clock();
+		clock_t endTime;
+		
 		try
 		//invoke callable objects within try block
 		{
 			//invoke callable object
 			i();
-			//log pass/fail
-			Log(1); //log pass since 1(true) is being passed in
+
+			//store end time
+			endTime  = clock() - startTime;
+
+			//log pass
+			Log(1, "Pass", startTime, endTime, testNum); //log pass since 1(true) is being passed in
+		}
+		catch (std::exception& e)
+		{
+			//store end time
+			endTime  = clock() - startTime;
+
+			//log fail
+			Log(0, e.what(), startTime, endTime, testNum);
 		}
 		catch (/*std::bad_alloc & ba*/ ...)
 		{
-			Log(0);
+			//store end time
+			endTime  = clock() - startTime;
+
+			//log fail
+			Log(0, "Unknown Exception Thrown!", startTime, endTime, testNum);
 		}
+
+		testNum++;
+
 	}
 }
 
-//NOTE: log function might need to take in more parameters, such as start/end times, and error messages
-void TestHarness::Log(bool pass) 
+void TestHarness::Log(bool pass, std::string message, clock_t startTime, clock_t endTime, int testNum) 
 //print pass/fail based on what is passed in
 {
-	std::string logString;
-	if(logLevel == LogLevel::LOW)
+
+	std::string logString = "";
+
+	//All log levels will at least log pass/fail
+	if (pass)
 	{
-		if (pass)
-		{
-			logString = "pass";
-		}
-		else if (!pass)
-		{
-			logString = "fail";
-		}
+		logString = "Test #" + std::to_string(testNum) + " passed. ";
 	}
-	else if (logLevel == LogLevel::MEDIUM)
+
+	else 
 	{
-		//TODO: log any error messages
+		logString = "Test #" + std::to_string(testNum) + " failed. ";
 	}
-	else
+
+	//If log level is MEDIUM and the test failed, add the error message to the log string
+	if (logLevel == LogLevel::MEDIUM && !pass)
 	{
-		//TODO: log start and end time as well as error messages
+		logString += "Test failure message: " + message + ". ";
 	}
+	
+	//If the log level is HIGH add the start and end times to the log string
+	if (logLevel == LogLevel::HIGH)
+	{
+		logString += "Test start time: " + std::to_string(startTime) + ". Test End Time: " + std::to_string(startTime) +". ";
+	}
+
 	report << logString << std::endl;
 }
 

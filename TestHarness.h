@@ -14,6 +14,7 @@ Notes:
 #include <vector>
 #include <sstream>
 #include <iostream>
+#include <ctime>
 #include "Functor.cpp"
 
 class TestHarness
@@ -29,7 +30,7 @@ public:
 	void SetLogLevel(LogLevel logLevel);				//Sets the log level for the test Harness
 	void Executor();										//executes a callable at the set log level
 	std::string ToString();							//pretty much the getter for report
-	void Log(bool pass);								//logs the result
+	void Log(bool pass, std::string, clock_t startTime, clock_t endTime, int testNum);								//logs the result
 	template <typename Callable>
 	void AddTestToSuite(Callable& co);					//adds the test case to testsuite
 	void AddTestToSuite(std::function<bool()> callable);	//adds test case to testsuite
