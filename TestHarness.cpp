@@ -1,5 +1,8 @@
 #include "TestHarness.h"
 
+#include <new>
+#include <typeinfo>
+
 TestHarness::TestHarness()
 {
 	
@@ -74,4 +77,95 @@ void TestHarness::AddTestToSuite(Callable& co)
 void TestHarness::ResetTestSuite()
 {
 	this->TestSuite.clear();
+}
+
+/**
+ * Main method to run tests 
+ * 
+ */
+
+// Use for testing bad casting 
+class Base { virtual void member() {} };
+class Derived : Base {} ;
+
+bool TestBadAlloc();
+bool TestBadCast();
+void TestBadException();
+void TestBadTypeID();
+void TestBadFunctionCall();
+void TestBadWeakPtr();
+
+int main()
+{
+	
+	TestHarness th;
+
+	th.AddTestToSuite(TestBadAlloc);
+	th.AddTestToSuite(TestBadCast);
+
+    Functor F;
+	//F();
+	th.AddTestToSuite(F);
+
+	th.Executor();
+
+	std::cout << th.ToString();
+
+	return 0;
+}
+
+/**
+ * 
+ */
+bool TestBadAlloc()
+{
+    while (true)
+    {
+        new int [100000000ul];
+    }
+
+    return true;
+
+}
+
+/**
+ * 
+ */
+bool TestBadCast()
+{
+    Base b;
+    Derived & rd = dynamic_cast<Derived&>(b);
+    return false;
+}
+
+/**
+ * 
+ */
+void TestBadException()
+{
+
+}
+
+/**
+ * 
+ */
+void TestBadTypeID()
+{
+
+}
+
+/**
+ * 
+ */
+void TestBadFunctionCall()
+{
+
+}
+
+/**
+ * 
+ */
+void TestBadWeakPtr()
+{
+
 }
