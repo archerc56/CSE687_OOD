@@ -1,6 +1,7 @@
 #include "TestHarness.h"
 
 #include <new>
+#include <memory>
 #include <typeinfo>
 
 TestHarness::TestHarness()
@@ -99,7 +100,7 @@ bool TestBadCast();
 void TestBadException();
 bool TestBadTypeID();
 void TestBadFunctionCall();
-void TestBadWeakPtr();
+bool TestBadWeakPtr();
 
 int main()
 {
@@ -108,6 +109,8 @@ int main()
 
 	th.AddTestToSuite(TestBadAlloc);
 	th.AddTestToSuite(TestBadCast);
+    th.AddTestToSuite(TestBadTypeID);
+    th.AddTestToSuite(TestBadWeakPtr);
 
     Functor F;
 	//F();
@@ -181,7 +184,15 @@ void TestBadFunctionCall()
 /**
  * 
  */
-void TestBadWeakPtr()
+bool TestBadWeakPtr()
 {
+    std::bad_weak_ptr e;
+    std::shared_ptr<int> p1(new int(100));
+    std::weak_ptr<int> wp(p1);
+    p1.reset();
+
+    throw e;
+    return true;
+    
 
 }
