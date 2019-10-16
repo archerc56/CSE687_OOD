@@ -6,6 +6,9 @@
 class Functor //this is a functor which is a class that overloads operator()
 {
         public:
-        void operator()() const; //overloading function call operator (operator())
+        //Functor();
+
+        inline
+        bool operator()() const; //overloading function call operator (operator())
 };
 #endif

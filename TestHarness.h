@@ -14,6 +14,7 @@ Notes:
 #include <vector>
 #include <sstream>
 #include <iostream>
+#include "Functor.cpp"
 
 
 class TestHarness
@@ -32,17 +33,17 @@ public:
 	void setLogLevel(LogLevel logLevel);				//Sets the log level for the test Harness
 	void execute();										//executes a callable at the set log level
 
-	void log(bool);										//takes int arguement, 1 or 0 for pass or fail
-
 	std::string to_String();							//pretty much the getter for report
+	void log(bool pass);								//logs the result
+	template <typename Callable>
+	void add_Test_to_Suite(Callable& co);					//adds the test case to testsuite
 
-	void add_Test_to_Suite(std::function<void()> callable);	//adds test case to testsuite
+	void add_Test_to_Suite(std::function<bool()> callable);	//adds test case to testsuite
 	void reset_TestSuite();									//resets the test suite
 
 private:
 	LogLevel logLevel = HIGH;
-	std::vector<std::function<void()>> TestSuite;	//group of function pointers
-
+	std::vector<std::function<bool()>> TestSuite;	//group of function pointers
 	std::stringstream report;						//final report of all passes and fails.  when log() is called this string is appended	
 
 

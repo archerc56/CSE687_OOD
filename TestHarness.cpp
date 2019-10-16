@@ -30,19 +30,28 @@ void TestHarness::execute()
 	}
 }
 
-
+//NOTE: log function might need to take in more parameters, such as start/end times, and error messages
 void TestHarness::log(bool pass)
 {
 	std::string logString;
+	if(logLevel == LogLevel::LOW){
+		if (pass)
+		{
+			logString = "pass";
+		}
+		else if (!pass)
+		{
+			logString = "fail";
+		}
 
-	if (pass)
-	{
-		logString = "pass";
 	}
-	else if (!pass)
-	{
-		logString = "fail";
+	else if (logLevel == LogLevel::MEDIUM){
+		//TODO: log any error messages
 	}
+	else{
+		//TODO: log start and end time as well as error messages
+	}
+	
 
 	report << logString << std::endl;
 }
@@ -55,11 +64,17 @@ std::string TestHarness::to_String()
 }
 
 
-void TestHarness::add_Test_to_Suite(std::function<void()> callable)
+void TestHarness::add_Test_to_Suite(std::function<bool()> callable)
 {
-
 	TestSuite.push_back(callable);
 }
+
+template <typename Callable>
+void TestHarness::add_Test_to_Suite(Callable& co)
+{
+	TestSuite.push_back(co);
+}
+
 
 void TestHarness::reset_TestSuite()
 {
