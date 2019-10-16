@@ -20,12 +20,15 @@ void TestHarness::SetLogLevel(LogLevel logLevel)
 
 void TestHarness::Executor()
 {
-	for (auto &i : this->TestSuite)
+	for (auto &i : this->TestSuite) //iterate through TestSuite vector contents
 	{
 		try
+		//invoke callable objects within try block
 		{
+			//invoke callable object
 			i();
-			Log(1);
+			//log pass/fail
+			Log(1); //log pass since 1(true) is being passed in
 		}
 		catch (/*std::bad_alloc & ba*/ ...)
 		{
@@ -35,10 +38,12 @@ void TestHarness::Executor()
 }
 
 //NOTE: log function might need to take in more parameters, such as start/end times, and error messages
-void TestHarness::Log(bool pass)
+void TestHarness::Log(bool pass) 
+//print pass/fail based on what is passed in
 {
 	std::string logString;
-	if(logLevel == LogLevel::LOW){
+	if(logLevel == LogLevel::LOW)
+	{
 		if (pass)
 		{
 			logString = "pass";
@@ -47,12 +52,13 @@ void TestHarness::Log(bool pass)
 		{
 			logString = "fail";
 		}
-
 	}
-	else if (logLevel == LogLevel::MEDIUM){
+	else if (logLevel == LogLevel::MEDIUM)
+	{
 		//TODO: log any error messages
 	}
-	else{
+	else
+	{
 		//TODO: log start and end time as well as error messages
 	}
 	report << logString << std::endl;
@@ -65,17 +71,20 @@ std::string TestHarness::ToString()
 }
 
 void TestHarness::AddTestToSuite(std::function<bool()> callable)
+//add function pointer to TestSuite vector
 {
 	TestSuite.push_back(callable);
 }
 
 template <typename Callable>
 void TestHarness::AddTestToSuite(Callable& co)
+//overloaded AddTestToSuite function. add functor to TestSuite vector
 {
 	TestSuite.push_back(co);
 }
 
 void TestHarness::ResetTestSuite()
+//remove all elements from TestSuite vector. TestSuite.size() == 0
 {
 	this->TestSuite.clear();
 }
@@ -140,8 +149,8 @@ bool TestBadAlloc()
     {
         new int [100000000ul];
     }
-
-    throw x;
+	
+	throw x;
     return true;
 }
 
