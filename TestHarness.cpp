@@ -37,7 +37,8 @@ void TestHarness::Executor()
 void TestHarness::Log(bool pass)
 {
 	std::string logString;
-	if(logLevel == LogLevel::LOW){
+	if(logLevel == LogLevel::LOW)
+	{
 		if (pass)
 		{
 			logString = "pass";
@@ -46,12 +47,13 @@ void TestHarness::Log(bool pass)
 		{
 			logString = "fail";
 		}
-
 	}
-	else if (logLevel == LogLevel::MEDIUM){
+	else if (logLevel == LogLevel::MEDIUM)
+	{
 		//TODO: log any error messages
 	}
-	else{
+	else
+	{
 		//TODO: log start and end time as well as error messages
 	}
 	report << logString << std::endl;
