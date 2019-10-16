@@ -88,10 +88,16 @@ void TestHarness::ResetTestSuite()
 class Base { virtual void member() {} };
 class Derived : Base {} ;
 
+// Polymorphic struct so we can throw a bad_typeid.
+// This type of exception is thrown each time a typeid is applied
+// to a dereferenced null pointer value of polymorphic type. 
+
+struct BadStruct{ virtual void BadStructFuction(); };
+
 bool TestBadAlloc();
 bool TestBadCast();
 void TestBadException();
-void TestBadTypeID();
+bool TestBadTypeID();
 void TestBadFunctionCall();
 void TestBadWeakPtr();
 
@@ -134,11 +140,11 @@ bool TestBadAlloc()
  */
 bool TestBadCast()
 {
-    std::bad_cast exec;
+    std::bad_cast e;
     Base b;
     Derived & rd = dynamic_cast<Derived&>(b);
 
-    throw exec;
+    throw e;
 
     return true;
 }
@@ -154,9 +160,14 @@ void TestBadException()
 /**
  * 
  */
-void TestBadTypeID()
+bool TestBadTypeID()
 {
+    std::bad_typeid e;
+    BadStruct * ptr = nullptr;
+    std::cout << typeid(*ptr).name() << '\n';
 
+    throw e;
+    return true;
 }
 
 /**
