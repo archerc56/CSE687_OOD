@@ -1,5 +1,4 @@
 //Created: October 11, 2019 @ 11:53 PM Central Time
-
 #ifndef FUNCTORS_H
 #define FUNCTORS_H
 #include <iostream>

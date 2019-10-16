@@ -123,9 +123,7 @@ bool TestBadAlloc()
     {
         new int [100000000ul];
     }
-
     return true;
-
 }
 
 /**
