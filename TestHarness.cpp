@@ -119,13 +119,14 @@ int main()
  */
 bool TestBadAlloc()
 {
+    std::bad_alloc x;
     while (true)
     {
         new int [100000000ul];
     }
 
+    throw x;
     return true;
-
 }
 
 /**
@@ -133,9 +134,13 @@ bool TestBadAlloc()
  */
 bool TestBadCast()
 {
+    std::bad_cast exec;
     Base b;
     Derived & rd = dynamic_cast<Derived&>(b);
-    return false;
+
+    throw exec;
+
+    return true;
 }
 
 /**
