@@ -1,4 +1,4 @@
-#include "TestHarness.h"
+#include "TestHarness.cpp"
 
 bool test_Bad_Alloc();
 void test_Bad_cast();
