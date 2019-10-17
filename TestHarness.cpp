@@ -4,14 +4,8 @@
 #include <memory>
 #include <typeinfo>
 
-TestHarness::TestHarness()
-{
-
-}
-TestHarness::~TestHarness()
-{
-
-}
+TestHarness::TestHarness(){}
+TestHarness::~TestHarness(){}
 
 void TestHarness::SetLogLevel(LogLevel newLogLevel)
 {
@@ -19,24 +13,23 @@ void TestHarness::SetLogLevel(LogLevel newLogLevel)
 }
 
 //Converts the passed in clock ticks to milliseconds
-float convertClockTicksToMilliSeconds(clock_t ticks) {
+float convertClockTicksToMilliSeconds(clock_t ticks) 
+{
 	return (ticks / (CLOCKS_PER_SEC * 1.0)) / 1000.0;
 }
 
 void TestHarness::Executor()
+//invoke each callable object and log its results
 {
 	int testNum = 1;
-	for (auto& i : this->TestSuite) //iterate through TestSuite vector contents
+	for (auto& i : this->TestSuite) //iterate through callable objects contained in TestSuite vector
 	{
 		float x, y;
 		float startTime = convertClockTicksToMilliSeconds(clock());
 		float runTime;
-
 		try
-			//invoke callable objects within try block
 		{
-			//invoke callable object
-			i();
+			i(); //invoke each callable object contained in TestSuite vector
 
 			//store end time
 			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
@@ -60,17 +53,13 @@ void TestHarness::Executor()
 			//log fail
 			Log(0, "Unknown Exception Thrown!", runTime, testNum);
 		}
-
-		testNum++;
-
+		testNum++; //increment test number
 	}
 }
 
-
 void TestHarness::Log(bool pass, std::string message, float runTime, int testNum)
-//print pass/fail based on what is passed in
+//record each test. logLevel determines how much info is recorded. logLevel is defaulted to HIGH
 {
-
 	std::string logString = "";
 
 	//All log levels will at least log pass/fail
@@ -78,7 +67,6 @@ void TestHarness::Log(bool pass, std::string message, float runTime, int testNum
 	{
 		logString = "Test #" + std::to_string(testNum) + " passed. ";
 	}
-
 	else
 	{
 		logString = "Test #" + std::to_string(testNum) + " failed. ";
@@ -95,7 +83,6 @@ void TestHarness::Log(bool pass, std::string message, float runTime, int testNum
 	{
 		logString += "Test run time: " + std::to_string(runTime) + "ms. ";
 	}
-
 	report << logString << std::endl;
 }
 
@@ -105,7 +92,7 @@ std::string TestHarness::ToString()
 	return returnString;
 }
 
-void TestHarness::AddTestToSuite(std::function<bool()> callable)
+void TestHarness::AddTestToSuite(std::function<void()> callable)
 //add function pointer to TestSuite vector
 {
 	TestSuite.push_back(callable);
@@ -124,11 +111,6 @@ void TestHarness::ResetTestSuite()
 	this->TestSuite.clear();
 }
 
-/**
- * Main method to run tests
- *
- */
-
  // Use for testing bad casting 
 class Base { virtual void member() {} };
 class Derived : Base {};
@@ -136,7 +118,6 @@ class Derived : Base {};
 // Polymorphic struct so we can throw a bad_typeid.
 // This type of exception is thrown each time a typeid is applied
 // to a dereferenced null pointer value of polymorphic type. 
-
 struct BadStruct { virtual void BadStructFuction(); };
 
 // Functions for throwing a bad_exception
@@ -152,9 +133,8 @@ bool TestBadWeakPtr();
 
 int main()
 {
-
-	TestHarness th;
-
+	TestHarness th; //create instance of TestHarness class
+	//pass in various test functions into TestSuite. These functions trigger various exceptions.
 	th.AddTestToSuite(TestBadAlloc);
 	th.AddTestToSuite(TestBadCast);
 	th.AddTestToSuite(TestBadTypeID);
@@ -163,19 +143,13 @@ int main()
 	th.AddTestToSuite(TestBadException);
 
 	Functor F;
-	//F();
-	th.AddTestToSuite(F);
+	th.AddTestToSuite(F); //pass in Functor into TestSuite vector
 
 	th.Executor();
-
 	std::cout << th.ToString();
-
 	return 0;
 }
 
-/**
- *
- */
 bool TestBadAlloc()
 {
 	std::bad_alloc x;
@@ -184,21 +158,16 @@ bool TestBadAlloc()
 	{
 		new int[100000000ul];
 	}
-
 	throw x;
 	return true;
 }
 
-/**
- *
- */
 bool TestBadCast()
 {
 	std::bad_cast e;
 	std::cout << "TestBadCast \n";
 	Base b;
 	Derived& rd = dynamic_cast<Derived&>(b);
-
 	throw e;
 	return true;
 }
@@ -208,53 +177,37 @@ void test_throw_e() throw(std::bad_exception)
 {
 	throw std::runtime_error("Error");
 }
-/**
- *
- */
+
 bool TestBadException()
 {
 	std::bad_exception e;
 	std::cout << "TestBadException \n";
 	std::set_unexpected(throw_e);
 	test_throw_e();
-
 	throw e;
 	return true;
-
 }
 
-/**
- *
- */
 bool TestBadTypeID()
 {
 	std::bad_typeid e;
 	std::cout << "TestBadTypeID \n";
 	BadStruct* ptr = nullptr;
 	std::cout << typeid(*ptr).name() << '\n';
-
 	throw e;
 	return true;
 }
 
-/**
- *
- */
 bool TestBadFunctionCall()
 {
 	std::bad_function_call e;
 	std::cout << "TestBadFunctionCall \n";
 	std::function<int()> TestBadFunction = nullptr;
 	TestBadFunction();
-
 	throw e;
 	return true;
-
 }
 
-/**
- *
- */
 bool TestBadWeakPtr()
 {
 	std::bad_weak_ptr e;
@@ -262,9 +215,6 @@ bool TestBadWeakPtr()
 	std::shared_ptr<int> p1(new int(100));
 	std::weak_ptr<int> wp(p1);
 	p1.reset();
-
 	throw e;
 	return true;
-
-
 }
