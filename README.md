@@ -3,7 +3,7 @@ Travis CI Build Status: [![Build Status](https://travis-ci.com/archerc56/CSE687_
 
 The Travis build compiles the repo using both the g++ and clang compilers
 
-Expected Results of running project after it has been built: 
+Execution Output: 
 
 ```
 **Running tests at high log level
