@@ -3,7 +3,7 @@
 ## Team Members:
 Cade Archer, Michael Cheng, Sameer Rizvi, Bryan Ulrich
 
-## Travis CI Build Status: [![Build Status](https://travis-ci.com/archerc56/CSE687_OOD.svg?branch=master)](https://travis-ci.com/archerc56/CSE687_OOD)
+## Travis CI Build Status: [![Build Status](https://travis-ci.com/archerc56/CSE687_OOD.svg?branch=Project-1-Turn-in)](https://travis-ci.com/archerc56/CSE687_OOD)
 Compiles the project using both clang and g++ compilers
 
 ## [Project Requirements:](https://github.com/archerc56/CSE687_OOD/files/3745932/Project1.Requirements.docx)
