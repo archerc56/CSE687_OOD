@@ -3,8 +3,8 @@
 #include <memory>
 #include <typeinfo>
 
-TestHarness::TestHarness(){}
-TestHarness::~TestHarness(){}
+TestHarness::TestHarness() {}
+TestHarness::~TestHarness() {}
 
 void TestHarness::SetLogLevel(LogLevel newLogLevel)
 {
@@ -12,7 +12,7 @@ void TestHarness::SetLogLevel(LogLevel newLogLevel)
 }
 
 //Converts the passed in clock ticks to milliseconds
-float convertClockTicksToMilliSeconds(clock_t ticks) 
+float convertClockTicksToMilliSeconds(clock_t ticks)
 {
 	return (ticks / (CLOCKS_PER_SEC * 1.0)) / 1000.0;
 }
@@ -21,6 +21,7 @@ void TestHarness::Executor()
 //invoke each callable object and log its results
 {
 	int testNum = 1;
+	std::cout << "Running Tests:" << std::endl;
 	for (auto& i : this->TestSuite) //iterate through callable objects contained in TestSuite vector
 	{
 		float x, y;
@@ -29,7 +30,7 @@ void TestHarness::Executor()
 		try
 		{
 			//invoke each callable object
-			i(); 
+			i();
 
 			//store end time
 			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
@@ -55,7 +56,7 @@ void TestHarness::Executor()
 		}
 		testNum++; //increment test number
 	}
-	std::cout<<"\n";
+	std::cout << "\n";
 }
 
 void TestHarness::Log(bool pass, std::string message, float runTime, int testNum)
@@ -89,6 +90,7 @@ void TestHarness::Log(bool pass, std::string message, float runTime, int testNum
 
 std::string TestHarness::ToString()
 {
+	std::cout << "Test Results: " << std::endl;
 	std::string returnString = this->report.str();
 	return returnString;
 }
@@ -109,10 +111,11 @@ void TestHarness::AddTestToSuite(Callable& co)
 void TestHarness::ResetTestSuite()
 //remove all elements from TestSuite vector. TestSuite.size() == 0
 {
-	this->TestSuite.clear();
+	TestSuite.clear();
+	report.str(std::string());
 }
 
- // Use for testing bad casting 
+// Use for testing bad casting 
 class Base { virtual void member() {} };
 class Derived : Base {};
 
@@ -136,39 +139,80 @@ void TestAllocate();
 
 int main()
 {
+
 	TestHarness th; //create instance of TestHarness class
 	//pass in various test functions into TestSuite. These functions trigger various exceptions.
+
+	std::cout << "**Running tests at high log level\n\n";
 	th.AddTestToSuite(TestBadAlloc);
 	th.AddTestToSuite(TestBadCast);
 	th.AddTestToSuite(TestBadTypeID);
 	th.AddTestToSuite(TestBadWeakPtr);
 	th.AddTestToSuite(TestBadFunctionCall);
 	th.AddTestToSuite(TestBadException);
-    th.AddTestToSuite(TestAdd);
-    th.AddTestToSuite(TestAllocate);
+	th.AddTestToSuite(TestAdd);
+	th.AddTestToSuite(TestAllocate);
 
 	Functor F;
 	th.AddTestToSuite(F); //pass in Functor into TestSuite vector
 
 	th.Executor();
 	std::cout << th.ToString();
+	std::cout << "**Restting test suite\n\n";
+	th.ResetTestSuite();
+
+
+	th.SetLogLevel(TestHarness::LogLevel::MEDIUM);
+	std::cout << "**Running tests at medium log level\n\n";
+	th.AddTestToSuite(TestBadAlloc);
+	th.AddTestToSuite(TestBadCast);
+	th.AddTestToSuite(TestBadTypeID);
+	th.AddTestToSuite(TestBadWeakPtr);
+	th.AddTestToSuite(TestBadFunctionCall);
+	th.AddTestToSuite(TestBadException);
+	th.AddTestToSuite(TestAdd);
+	th.AddTestToSuite(TestAllocate);
+	th.AddTestToSuite(F); //pass in Functor into TestSuite vector
+
+	th.Executor();
+	std::cout << th.ToString();
+	std::cout << "**Restting test suite\n\n";
+	th.ResetTestSuite();
+
+	th.SetLogLevel(TestHarness::LogLevel::LOW);
+	std::cout << "**Running tests at low log level\n\n";
+	th.AddTestToSuite(TestBadAlloc);
+	th.AddTestToSuite(TestBadCast);
+	th.AddTestToSuite(TestBadTypeID);
+	th.AddTestToSuite(TestBadWeakPtr);
+	th.AddTestToSuite(TestBadFunctionCall);
+	th.AddTestToSuite(TestBadException);
+	th.AddTestToSuite(TestAdd);
+	th.AddTestToSuite(TestAllocate);
+	th.AddTestToSuite(F); //pass in Functor into TestSuite vector
+
+	th.Executor();
+	std::cout << th.ToString();
+	std::cout << "**Restting test suite\n\n";
+	th.ResetTestSuite();
+
 	return 0;
 }
 
 void TestAllocate()
 {
-    std::cout << "TestAllocate \n";
-    int * foo;
-    foo = new int [10];
+	std::cout << "TestAllocate \n";
+	int* foo;
+	foo = new int[10];
 }
 
 void TestAdd()
 {
-    std::cout << "TestAdd \n"; 
-    int i,j;
-    i = 1;
-    j = 2;
-    j = j + i;
+	std::cout << "TestAdd \n";
+	int i, j;
+	i = 1;
+	j = 2;
+	j = j + i;
 }
 
 bool TestBadAlloc()
