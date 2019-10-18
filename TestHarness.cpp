@@ -1,5 +1,4 @@
 #include "TestHarness.h"
-
 #include <new>
 #include <memory>
 #include <typeinfo>
@@ -29,7 +28,8 @@ void TestHarness::Executor()
 		float runTime;
 		try
 		{
-			i(); //invoke each callable object contained in TestSuite vector
+			//invoke each callable object
+			i(); 
 
 			//store end time
 			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
@@ -55,6 +55,7 @@ void TestHarness::Executor()
 		}
 		testNum++; //increment test number
 	}
+	std::cout<<"\n";
 }
 
 void TestHarness::Log(bool pass, std::string message, float runTime, int testNum)

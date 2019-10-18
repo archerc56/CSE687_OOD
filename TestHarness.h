@@ -1,4 +1,3 @@
-#pragma once
 /**************************************************************************************************************************
 CIS 687 Object Oriented Design Monday 9 PM
 Authors:
@@ -10,6 +9,8 @@ Last Updated:	10/9/2019 7:08 PM
 /**************************************************************************************************************************
 Notes:
 //**************************************************************************************************************************/
+#ifndef TESTHARNESS_H
+#define TESTHARNESS_H
 #include <functional>
 #include <vector>
 #include <sstream>
@@ -41,3 +42,4 @@ private:
 	std::vector<std::function<void()>> TestSuite;
 	std::stringstream report; //final report of all passes and fails.  when log() is called this string is appended
 };
+#endif
