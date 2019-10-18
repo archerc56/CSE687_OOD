@@ -1,5 +1,5 @@
 # CSE 687 Project #1 - Single-User Test Harness
-## Travis CI Build Status [![Build Status](https://travis-ci.com/archerc56/CSE687_OOD.svg?branch=master)](https://travis-ci.com/archerc56/CSE687_OOD)
+## Travis CI Build Status: [![Build Status](https://travis-ci.com/archerc56/CSE687_OOD.svg?branch=master)](https://travis-ci.com/archerc56/CSE687_OOD)
 Compiles the project using both clang and g++ compilers
 
 ## Requirements:
