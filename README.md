@@ -5,7 +5,7 @@ The Travis build compiles the repo using both the g++ and clang compilers
 
 Expected Results of running project after it has been built: 
 
-'''
+```
 **Running tests at high log level
 
 Running Tests:
@@ -80,5 +80,5 @@ Test #7 passed.
 Test #8 passed.
 Test #9 passed.
 **Restting test suite
-'''
+```
 
