@@ -131,6 +131,8 @@ bool TestBadException();
 bool TestBadTypeID();
 bool TestBadFunctionCall();
 bool TestBadWeakPtr();
+void TestAdd();
+void TestAllocate();
 
 int main()
 {
@@ -142,6 +144,8 @@ int main()
 	th.AddTestToSuite(TestBadWeakPtr);
 	th.AddTestToSuite(TestBadFunctionCall);
 	th.AddTestToSuite(TestBadException);
+    th.AddTestToSuite(TestAdd);
+    th.AddTestToSuite(TestAllocate);
 
 	Functor F;
 	th.AddTestToSuite(F); //pass in Functor into TestSuite vector
@@ -149,6 +153,22 @@ int main()
 	th.Executor();
 	std::cout << th.ToString();
 	return 0;
+}
+
+void TestAllocate()
+{
+    std::cout << "TestAllocate \n";
+    int * foo;
+    foo = new int [10];
+}
+
+void TestAdd()
+{
+    std::cout << "TestAdd \n"; 
+    int i,j;
+    i = 1;
+    j = 2;
+    j = j + i;
 }
 
 bool TestBadAlloc()
@@ -163,6 +183,9 @@ bool TestBadAlloc()
 	return true;
 }
 
+// Test case for bad casting. A dervied class 
+// should never be dynamically casted back to a base
+// class.
 bool TestBadCast()
 {
 	std::bad_cast e;
