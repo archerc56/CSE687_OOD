@@ -1,17 +1,8 @@
-# CSE 687 Project #1 - Single-User Test Harness
+# CSE 687 Project #2 -
 ## Travis CI Build Status: [![Build Status](https://travis-ci.com/archerc56/CSE687_OOD.svg?branch=master)](https://travis-ci.com/archerc56/CSE687_OOD)
 Compiles the project using both clang and g++ compilers
 
 ## Requirements:
-1. Shall be written in the standard C++ programming language, using the standard C++ libraries. 
-2. Shall provide a TestHarness class that defines an executor method, accepting any callable object that accepts no arguments2 and returns a bool predicate to indicate success or failure. 
-3. The executor method Shall invoke a passed callable object in the scope of a try block. If exceptions are thrown, the catch block you define for this method shall log test failure and the contents of the exception message. 
-4. Shall support linking any number of callable objects for execution, and shall provide a mechanism for executing that sequence. 
-5. Shall provide a multi-level logging mechanism, intended to show: 
-o	just pass-fail status
-o	application specific messages for pass and fail, along with the result
-o	detailed debugging output that includes, on failure, values of application specific variables, and an optional time-date stamp
-6. Shall provide a sequence of tests demonstrating all the features of your TestHarness. 
 
 
 ## Execution Output: 
