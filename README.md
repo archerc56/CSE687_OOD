@@ -1,8 +1,12 @@
 # CSE 687 Project #1 - Single-User Test Harness
+
+## Team Members:
+Cade Archer, Michael Cheng, Sameer Rizvi, Bryan Ulrich
+
 ## Travis CI Build Status: [![Build Status](https://travis-ci.com/archerc56/CSE687_OOD.svg?branch=master)](https://travis-ci.com/archerc56/CSE687_OOD)
 Compiles the project using both clang and g++ compilers
 
-## Requirements:
+## [Project Requirements:](https://github.com/archerc56/CSE687_OOD/files/3745932/Project1.Requirements.docx)
 1. Shall be written in the standard C++ programming language, using the standard C++ libraries. 
 2. Shall provide a TestHarness class that defines an executor method, accepting any callable object that accepts no arguments2 and returns a bool predicate to indicate success or failure. 
 3. The executor method Shall invoke a passed callable object in the scope of a try block. If exceptions are thrown, the catch block you define for this method shall log test failure and the contents of the exception message. 
@@ -92,4 +96,3 @@ Test #8 passed.
 Test #9 passed.
 **Restting test suite
 ```
-
