@@ -1,67 +1,258 @@
+/**************************************************************************************************************************
+CIS 687 Object Oriented Design Monday 9 PM
+
+Authors:		Cade Archer, Micheal Cheng, Sameer Rizvi, Bryan Ulrich
+File:			TestHarness.cpp
+Contents:		Class Definition(TestHarness), Function(main) 
+Description:	This file contains the definition of members within the TesHarness class, the main() function
+				and function declaration/definitions for all test functions used.
+
+Last Updated:	10/18/2019 9:05 AM
+//**************************************************************************************************************************/
+/***************************************************************************************************************************
+Notes:
+//**************************************************************************************************************************/
 #include "TestHarness.h"
+#include <new>
+#include <memory>
+#include <typeinfo>
 
-TestHarness::TestHarness()
+TestHarness::TestHarness(){}
+TestHarness::~TestHarness(){}
+
+void TestHarness::SetLogLevel(LogLevel newLogLevel)
 {
-	
-}
-TestHarness::~TestHarness()
-{
-
-}
-
-void TestHarness::setLogLevel(LogLevel logLevel)
-{
-
+	logLevel = newLogLevel;
 }
 
-void TestHarness::execute()
+//Converts the passed in clock ticks to milliseconds
+float convertClockTicksToMilliSeconds(clock_t ticks) 
 {
-	for (auto &i : this->TestSuite)
+	return (ticks / (CLOCKS_PER_SEC * 1.0)) / 1000.0;
+}
+
+void TestHarness::Executor()
+//invoke each callable object and log its results
+{
+	int testNum = 1;
+	for (auto& i : this->TestSuite) //iterate through callable objects contained in TestSuite vector
 	{
+		float x, y;
+		float startTime = convertClockTicksToMilliSeconds(clock());
+		float runTime;
 		try
 		{
-			i();
-			log(1);
+			//invoke each callable object
+			i(); 
+
+			//store end time
+			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
+
+			//log pass
+			Log(1, "Pass", runTime, testNum); //log pass since 1(true) is being passed in
+		}
+		catch (std::exception & e)
+		{
+			//store end time
+			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
+
+			//log fail
+			Log(0, e.what(), runTime, testNum);
 		}
 		catch (/*std::bad_alloc & ba*/ ...)
 		{
-			log(0);
+			//store end time
+			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
+
+			//log fail
+			Log(0, "Unknown Exception Thrown!", runTime, testNum);
 		}
+		testNum++; //increment test number
 	}
+	std::cout<<"\n";
 }
 
-
-void TestHarness::log(bool pass)
+void TestHarness::Log(bool pass, std::string message, float runTime, int testNum)
+//record each test. logLevel determines how much info is recorded. logLevel is defaulted to HIGH
 {
-	std::string logString;
+	std::string logString = "";
 
+	//All log levels will at least log pass/fail
 	if (pass)
 	{
-		logString = "pass";
+		logString = "Test #" + std::to_string(testNum) + " passed. ";
 	}
-	else if (!pass)
+	else
 	{
-		logString = "fail";
+		logString = "Test #" + std::to_string(testNum) + " failed. ";
 	}
 
+	//If log level is MEDIUM and the test failed, add the error message to the log string
+	if ((logLevel == LogLevel::MEDIUM || logLevel == LogLevel::HIGH) && !pass)
+	{
+		logString += "Test failure message: " + message + ". ";
+	}
+
+	//If the log level is HIGH add the start and end times to the log string
+	if (logLevel == LogLevel::HIGH)
+	{
+		logString += "Test run time: " + std::to_string(runTime) + "ms. ";
+	}
 	report << logString << std::endl;
 }
 
-
-std::string TestHarness::to_String()
+std::string TestHarness::ToString()
 {
 	std::string returnString = this->report.str();
 	return returnString;
 }
 
-
-void TestHarness::add_Test_to_Suite(std::function<void()> callable)
+void TestHarness::AddTestToSuite(std::function<void()> callable)
+//add function pointer to TestSuite vector
 {
-
 	TestSuite.push_back(callable);
 }
 
-void TestHarness::reset_TestSuite()
+template <typename Callable>
+void TestHarness::AddTestToSuite(Callable& co)
+//overloaded AddTestToSuite function. add functor to TestSuite vector
+{
+	TestSuite.push_back(co);
+}
+
+void TestHarness::ResetTestSuite()
+//remove all elements from TestSuite vector. TestSuite.size() == 0
 {
 	this->TestSuite.clear();
+}
+
+ // Use for testing bad casting 
+class Base { virtual void member() {} };
+class Derived : Base {};
+
+// Polymorphic struct so we can throw a bad_typeid.
+// This type of exception is thrown each time a typeid is applied
+// to a dereferenced null pointer value of polymorphic type. 
+struct BadStruct { virtual void BadStructFuction(); };
+
+// Functions for throwing a bad_exception
+void throw_e();
+void test_throw_e() throw(std::bad_exception);
+
+bool TestBadAlloc();
+bool TestBadCast();
+bool TestBadException();
+bool TestBadTypeID();
+bool TestBadFunctionCall();
+bool TestBadWeakPtr();
+void TestAdd();
+void TestAllocate();
+
+int main()
+{
+	TestHarness th; //create instance of TestHarness class
+	//pass in various test functions into TestSuite. These functions trigger various exceptions.
+	th.AddTestToSuite(TestBadAlloc);
+	th.AddTestToSuite(TestBadCast);
+	th.AddTestToSuite(TestBadTypeID);
+	th.AddTestToSuite(TestBadWeakPtr);
+	th.AddTestToSuite(TestBadFunctionCall);
+	th.AddTestToSuite(TestBadException);
+    th.AddTestToSuite(TestAdd);
+    th.AddTestToSuite(TestAllocate);
+
+	Functor F;
+	th.AddTestToSuite(F); //pass in Functor into TestSuite vector
+
+	th.Executor();
+	std::cout << th.ToString();
+	return 0;
+}
+
+void TestAllocate()
+{
+    std::cout << "TestAllocate \n";
+    int * foo;
+    foo = new int [10];
+}
+
+void TestAdd()
+{
+    std::cout << "TestAdd \n"; 
+    int i,j;
+    i = 1;
+    j = 2;
+    j = j + i;
+}
+
+bool TestBadAlloc()
+{
+	std::bad_alloc x;
+	std::cout << "TestBadAlloc \n";
+	while (true)
+	{
+		new int[100000000ul];
+	}
+	throw x;
+	return true;
+}
+
+// Test case for bad casting. A dervied class 
+// should never be dynamically casted back to a base
+// class.
+bool TestBadCast()
+{
+	std::bad_cast e;
+	std::cout << "TestBadCast \n";
+	Base b;
+	Derived& rd = dynamic_cast<Derived&>(b);
+	throw e;
+	return true;
+}
+
+void throw_e() { throw; }
+void test_throw_e() throw(std::bad_exception)
+{
+	throw std::runtime_error("Error");
+}
+
+bool TestBadException()
+{
+	std::bad_exception e;
+	std::cout << "TestBadException \n";
+	std::set_unexpected(throw_e);
+	test_throw_e();
+	throw e;
+	return true;
+}
+
+bool TestBadTypeID()
+{
+	std::bad_typeid e;
+	std::cout << "TestBadTypeID \n";
+	BadStruct* ptr = nullptr;
+	std::cout << typeid(*ptr).name() << '\n';
+	throw e;
+	return true;
+}
+
+bool TestBadFunctionCall()
+{
+	std::bad_function_call e;
+	std::cout << "TestBadFunctionCall \n";
+	std::function<int()> TestBadFunction = nullptr;
+	TestBadFunction();
+	throw e;
+	return true;
+}
+
+bool TestBadWeakPtr()
+{
+	std::bad_weak_ptr e;
+	std::cout << "TestBadWeakPtr \n";
+	std::shared_ptr<int> p1(new int(100));
+	std::weak_ptr<int> wp(p1);
+	p1.reset();
+	throw e;
+	return true;
 }
