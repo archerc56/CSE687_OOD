@@ -11,7 +11,7 @@ class Logger
                                             HIGH: detailed debugging output that includes, on failure, values of application specific variables,
                                             and an optional time-date stamp*/
 
-        static void Logger::Log(LogLevel logLevel, bool pass, std::string message, float runTime, int testNum)
+        static void Log(LogLevel logLevel, bool pass, std::string message, float runTime, int testNum)
         //record each test. logLevel determines how much info is recorded
         {
             std::string logString = "";
