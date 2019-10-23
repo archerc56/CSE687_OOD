@@ -123,17 +123,16 @@ void TestHarness::ResetTestSuite()
 	this->TestSuite.clear();
 }
 
-void TestHarness::loader(std::string xmlString)
-{
-	/*sudo code
+void TestHarness::dll_Loader(std::vector<std::string> dll_List)
+{	
 
-	while(xmlString.parse != xmlstring.end())
+	for (auto &v : dll_List)
 	{
 		loadlibrary;
 		AddTestToSuite(ITestFunction);
 	}
 
-	*/
+	
 }
 
 

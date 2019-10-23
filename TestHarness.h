@@ -38,7 +38,7 @@ public:
 	void AddTestToSuite(std::function<bool()> callable);	//adds test case to testsuite
 	void ResetTestSuite();									//resets the test suite
 
-	void loader(std::string);
+	void dll_Loader(std::vector<std::string>);
 
 private:
 	LogLevel logLevel = LogLevel::HIGH;
