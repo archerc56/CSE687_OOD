@@ -116,7 +116,6 @@ int main()
 	th.AddTestToSuite(F); //pass in Functor into TestSuite vector
 
 	th.Executor(Logger::LogLevel::HIGH);
-	std::cout << th.ToString();
 	std::cout << "**Restting test suite\n\n";
 	th.ResetTestSuite();
 	std::cout << "**Running tests at medium log level\n\n";
@@ -131,7 +130,6 @@ int main()
 	th.AddTestToSuite(F); //pass in Functor into TestSuite vector
 
 	th.Executor(Logger::LogLevel::MEDIUM);
-	std::cout << th.ToString();
 	std::cout << "**Restting test suite\n\n";
 	th.ResetTestSuite();
 
@@ -147,7 +145,6 @@ int main()
 	th.AddTestToSuite(F); //pass in Functor into TestSuite vector
 
 	th.Executor(Logger::LogLevel::LOW);
-	std::cout << th.ToString();
 	std::cout << "**Restting test suite\n\n";
 	th.ResetTestSuite();
 

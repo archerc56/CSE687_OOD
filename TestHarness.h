@@ -26,7 +26,6 @@ public:
 	TestHarness(); //constructor
 	~TestHarness(); //destructor
 	void Executor(Logger::LogLevel); //executes a callable at the set log level
-	std::string ToString();	//pretty much the getter for report
 	template <typename Callable>
 	void AddTestToSuite(Callable&); //adds the test case to testsuite
 	//void AddTestToSuite(std::function<bool()> callable);	//adds test case to testsuite
