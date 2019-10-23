@@ -6,18 +6,13 @@
 TestHarness::TestHarness() {}
 TestHarness::~TestHarness() {}
 
-void TestHarness::SetLogLevel(LogLevel newLogLevel)
-{
-	logLevel = newLogLevel;
-}
-
 //Converts the passed in clock ticks to milliseconds
 float convertClockTicksToMilliSeconds(clock_t ticks)
 {
 	return (ticks / (CLOCKS_PER_SEC * 1.0)) / 1000.0;
 }
 
-void TestHarness::Executor()
+void TestHarness::Executor(Logger::LogLevel logLevel)
 //invoke each callable object and log its results
 {
 	int testNum = 1;
@@ -36,7 +31,7 @@ void TestHarness::Executor()
 			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
 
 			//log pass
-			Log(1, "Pass", runTime, testNum); //log pass since 1(true) is being passed in
+			Logger::Log(logLevel, 1, "Pass", runTime, testNum); //log pass since 1(true) is being passed in
 		}
 		catch (std::exception & e)
 		{
@@ -44,7 +39,7 @@ void TestHarness::Executor()
 			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
 
 			//log fail
-			Log(0, e.what(), runTime, testNum);
+			Logger::Log(logLevel, 0, e.what(), runTime, testNum);
 		}
 		catch (/*std::bad_alloc & ba*/ ...)
 		{
@@ -52,47 +47,11 @@ void TestHarness::Executor()
 			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
 
 			//log fail
-			Log(0, "Unknown Exception Thrown!", runTime, testNum);
+			Logger::Log(logLevel, 0, "Unknown Exception Thrown!", runTime, testNum);
 		}
 		testNum++; //increment test number
 	}
 	std::cout << "\n";
-}
-
-void TestHarness::Log(bool pass, std::string message, float runTime, int testNum)
-//record each test. logLevel determines how much info is recorded. logLevel is defaulted to HIGH
-{
-	std::string logString = "";
-
-	//All log levels will at least log pass/fail
-	if (pass)
-	{
-		logString = "Test #" + std::to_string(testNum) + " passed. ";
-	}
-	else
-	{
-		logString = "Test #" + std::to_string(testNum) + " failed. ";
-	}
-
-	//If log level is MEDIUM and the test failed, add the error message to the log string
-	if ((logLevel == LogLevel::MEDIUM || logLevel == LogLevel::HIGH) && !pass)
-	{
-		logString += "Test failure message: " + message + ". ";
-	}
-
-	//If the log level is HIGH add the start and end times to the log string
-	if (logLevel == LogLevel::HIGH)
-	{
-		logString += "Test run time: " + std::to_string(runTime) + "ms. ";
-	}
-	report << logString << std::endl;
-}
-
-std::string TestHarness::ToString()
-{
-	std::cout << "Test Results: " << std::endl;
-	std::string returnString = this->report.str();
-	return returnString;
 }
 
 void TestHarness::AddTestToSuite(std::function<void()> callable)
@@ -156,13 +115,10 @@ int main()
 	Functor F;
 	th.AddTestToSuite(F); //pass in Functor into TestSuite vector
 
-	th.Executor();
+	th.Executor(Logger::LogLevel::HIGH);
 	std::cout << th.ToString();
 	std::cout << "**Restting test suite\n\n";
 	th.ResetTestSuite();
-
-
-	th.SetLogLevel(TestHarness::LogLevel::MEDIUM);
 	std::cout << "**Running tests at medium log level\n\n";
 	th.AddTestToSuite(TestBadAlloc);
 	th.AddTestToSuite(TestBadCast);
@@ -174,12 +130,11 @@ int main()
 	th.AddTestToSuite(TestAllocate);
 	th.AddTestToSuite(F); //pass in Functor into TestSuite vector
 
-	th.Executor();
+	th.Executor(Logger::LogLevel::MEDIUM);
 	std::cout << th.ToString();
 	std::cout << "**Restting test suite\n\n";
 	th.ResetTestSuite();
 
-	th.SetLogLevel(TestHarness::LogLevel::LOW);
 	std::cout << "**Running tests at low log level\n\n";
 	th.AddTestToSuite(TestBadAlloc);
 	th.AddTestToSuite(TestBadCast);
@@ -191,7 +146,7 @@ int main()
 	th.AddTestToSuite(TestAllocate);
 	th.AddTestToSuite(F); //pass in Functor into TestSuite vector
 
-	th.Executor();
+	th.Executor(Logger::LogLevel::LOW);
 	std::cout << th.ToString();
 	std::cout << "**Restting test suite\n\n";
 	th.ResetTestSuite();
