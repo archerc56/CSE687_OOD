@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TESTHARNESS_H
+#define TESTHARNESS_H
 /**************************************************************************************************************************
 CIS 687 Object Oriented Design Monday 9 PM
 Authors:
@@ -16,6 +17,11 @@ Notes:
 #include <iostream>
 #include <ctime>
 #include "Functor.cpp"
+#include <new>
+#include <memory>
+#include <typeinfo>
+#include <fstream>
+#include <string>
 
 class TestHarness
 {
@@ -44,4 +50,6 @@ private:
 	LogLevel logLevel = LogLevel::HIGH;
 	std::vector<std::function<bool()>> TestSuite;			//vector of callable objects
 	std::stringstream report;								//final report of all passes and fails.  when log() is called this string is appended
+	float convertClockTicksToMilliSeconds(clock_t ticks);
 };
+#endif
