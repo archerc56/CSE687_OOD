@@ -37,15 +37,11 @@ public:
 	void Executor();										//executes a callable at the set log level
 	std::string ToString();									//pretty much the getter for report
 	void Log(bool pass, std::string, float runTime, int testNum);//logs the result
-	
 	template <typename Callable>
 	void AddTestToSuite(Callable& co);						//adds the test case to testsuite
-	
 	void AddTestToSuite(std::function<bool()> callable);	//adds test case to testsuite
 	void ResetTestSuite();									//resets the test suite
-
 	void dll_Loader(std::vector<std::string>);
-
 private:
 	LogLevel logLevel = LogLevel::HIGH;
 	std::vector<std::function<bool()>> TestSuite;			//vector of callable objects
