@@ -22,21 +22,17 @@ Notes:
 #include <typeinfo>
 #include <fstream>
 #include <string>
+#include "Logger.h"
 
 class TestHarness
 {
 public:
-	enum LogLevel { HIGH, MEDIUM, LOW };				/* LOW: just pass-fail status
-														MEDIUM: application specific messages for pass and fail, along with the result
-														HIGH: detailed debugging output that includes, on failure, values of application specific variables,
-														and an optional time-date stamp
-														*/
+
 	TestHarness();
 	~TestHarness();
-	void SetLogLevel(LogLevel logLevel);					//Sets the log level for the test Harness
+	void SetLogLevel(Logger::LogLevel logLevel);					//Sets the log level for the test Harness
 	void Executor();										//executes a callable at the set log level
 	std::string ToString();									//pretty much the getter for report
-	void Log(bool pass, std::string, float runTime, int testNum);//logs the result
 	
 	template <typename Callable>
 	void AddTestToSuite(Callable& co);						//adds the test case to testsuite
@@ -47,7 +43,7 @@ public:
 	void dll_Loader(std::vector<std::string>);
 
 private:
-	LogLevel logLevel = LogLevel::HIGH;
+	Logger::LogLevel logLevel = Logger::LogLevel::HIGH;
 	std::vector<std::function<bool()>> TestSuite;			//vector of callable objects
 	std::stringstream report;								//final report of all passes and fails.  when log() is called this string is appended
 	float convertClockTicksToMilliSeconds(clock_t ticks);
