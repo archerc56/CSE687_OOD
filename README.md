@@ -6,7 +6,7 @@ Cade Archer, Michael Cheng, Sameer Rizvi, Bryan Ulrich
 ## Travis CI Build Status: [![Build Status](https://travis-ci.com/archerc56/CSE687_OOD.svg?branch=master)](https://travis-ci.com/archerc56/CSE687_OOD)
 Compiles the project using both clang and g++ compilers
 
-## [Project Requirements:](https://github.com/archerc56/CSE687_OOD/files/3745932/Project1.Requirements.docx)
+## Project Requirements
 1.	Shall be prepared using the latest version of Visual Studio, and written in the standard C++ programming language, using the standard C++ libraries.
 2.	Shall use Visual Studio, Community Edition available at no cost.
 3.	Shall provide packages for an Executive, TestHarness, Logger, and FileManager (if needed).
