@@ -1,20 +1,13 @@
 #include "Executive.h"
 
-Executive::Executive()
-{
-}
-
-Executive::~Executive()
-{
-}
+Executive::Executive(){}
+Executive::~Executive(){}
 
 void Executive::harnessLoader(std::string xmlFileString)
 {
 	//<----- After Parse put each .dll as a string in this vector with-------->
 	std::vector<std::string> dll_List;
-	
 	dll_List = ParseXML(xmlFileString);
-
 	this->testHarness.dll_Loader(dll_List);
 }
 
@@ -36,7 +29,6 @@ std::string Executive::removeSub(std::string s, std::string to_remove)
 	string::size_type size = s.find(to_remove);
 	if (size != string::npos)
 		s.erase(size, to_remove.length());
-
 	return s;
 }
 
@@ -54,23 +46,17 @@ std::vector<std::string> Executive::ParseXML(std::string test_file)
 	{
 		getline(inFile, input);
 		dlls_raw_content.push_back(input);
-
 	}
-
 	inFile.close();
-
 	for (int i = 0; i<dlls_raw_content.size(); i++)
 	{
 		if (dlls_raw_content[i].find(to_parse) == 0)
 		{
-
 			string Final = removeSub(dlls_raw_content[i], to_parse);
 			Final = removeSub(Final, to_remove);
 			parsed_vector.push_back(Final);
-
 		}
 	}
-
 	for (int i = 0; i<parsed_vector.size(); i++)
 	{
 		cout << parsed_vector[i] << endl;

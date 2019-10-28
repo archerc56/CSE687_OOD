@@ -40,12 +40,9 @@ public:
 	
 	template <typename Callable>
 	void AddTestToSuite(Callable& co);						//adds the test case to testsuite
-	
 	void AddTestToSuite(std::function<bool()> callable);	//adds test case to testsuite
 	void ResetTestSuite();									//resets the test suite
-
 	void dll_Loader(std::vector<std::string>);
-
 private:
 	LogLevel logLevel = LogLevel::HIGH;
 	std::vector<std::function<bool()>> TestSuite;			//vector of callable objects

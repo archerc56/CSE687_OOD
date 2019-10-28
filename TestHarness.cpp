@@ -59,9 +59,7 @@ void TestHarness::Executor()
 			//log fail
 			Log(0, "Unknown Exception Thrown!", runTime, testNum);
 		}
-
 		testNum++;
-
 	}
 }
 
@@ -125,13 +123,9 @@ void TestHarness::ResetTestSuite()
 
 void TestHarness::dll_Loader(std::vector<std::string> dll_List)
 {	
-
 	for (auto &v : dll_List)
 	{
 		/*loadlibrary;
 		AddTestToSuite(ITestFunction);*/
 	}
-
-	
 }
-
