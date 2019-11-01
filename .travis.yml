@@ -1,6 +1,7 @@
 sudo: false
 language: cpp
 os: windows
+warnings_are_errors: false
 compiler:
   - gcc
   - clang
