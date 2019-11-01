@@ -4,6 +4,12 @@ os: windows
 compiler:
   - gcc
   - clang
+env:
+  - CC="/c/ProgramData/chocolatey/lib/mingw/tools/install/mingw64/bin/x86_64-w64-mingw32-gcc"
+  - CXX="/c/ProgramData/chocolatey/lib/mingw/tools/install/mingw64/bin/x86_64-w64-mingw32-g++"
+install:
+  - choco upgrade mingw -y
+  - ${CC} --version
 addons:
   apt:
     sources:
