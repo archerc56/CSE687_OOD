@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
 <xs:element name="test_name" type="xs:string"/>
-<test_name>test1.dll</test_name>
-<test_name>test2.dll</test_name>
-<test_name>test4.dll</test_name>
-<test_name>test6.dll</test_name>
-<test_name>test4.dll</test_name>
-<test_name>test10.dll</test_name>
+<test_name>test1</test_name>
+
+

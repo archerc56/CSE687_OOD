@@ -1,7 +1,5 @@
 #include "TestHarness.h"
-#include <new>
-#include <memory>
-#include <typeinfo>
+
 
 TestHarness::TestHarness()
 {
@@ -12,6 +10,11 @@ TestHarness::~TestHarness()
 
 }
 
+void TestHarness::SetLogLevel(LogLevel newLogLevel)
+{
+	logLevel = newLogLevel;
+}
+
 //Converts the passed in clock ticks to milliseconds
 float TestHarness::convertClockTicksToMilliSeconds(clock_t ticks) {
 	return (ticks / (CLOCKS_PER_SEC * 1.0)) / 1000.0;
@@ -20,7 +23,7 @@ float TestHarness::convertClockTicksToMilliSeconds(clock_t ticks) {
 void TestHarness::Executor()
 {
 	int testNum = 1;
-	for (auto& i : this->TestSuite) //iterate through TestSuite vector contents
+	for (auto& i : this->PointerTestSuite/*TestSuite*/) //iterate through TestSuite vector contents
 	{
 		float x, y;
 		float startTime = convertClockTicksToMilliSeconds(clock());
@@ -36,7 +39,7 @@ void TestHarness::Executor()
 			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
 
 			//log pass
-			Logger::Log(logLevel, 1, "Pass", runTime, testNum); //log pass since 1(true) is being passed in
+			Log(1, "Pass", runTime, testNum); //log pass since 1(true) is being passed in
 		}
 		catch (std::exception & e)
 		{
@@ -44,7 +47,7 @@ void TestHarness::Executor()
 			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
 
 			//log fail
-			Logger::Log(logLevel,0, e.what(), runTime, testNum);
+			Log(0, e.what(), runTime, testNum);
 		}
 		catch (/*std::bad_alloc & ba*/ ...)
 		{
@@ -52,10 +55,44 @@ void TestHarness::Executor()
 			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
 
 			//log fail
-			Logger::Log(logLevel, 0, "Unknown Exception Thrown!", runTime, testNum);
+			Log(0, "Unknown Exception Thrown!", runTime, testNum);
 		}
+
 		testNum++;
+
 	}
+}
+
+void TestHarness::Log(bool pass, std::string message, float runTime, int testNum)
+//print pass/fail based on what is passed in
+{
+
+	std::string logString = "";
+
+	//All log levels will at least log pass/fail
+	if (pass)
+	{
+		logString = "Test #" + std::to_string(testNum) + " passed. ";
+	}
+
+	else
+	{
+		logString = "Test #" + std::to_string(testNum) + " failed. ";
+	}
+
+	//If log level is MEDIUM and the test failed, add the error message to the log string
+	if ((logLevel == LogLevel::MEDIUM || logLevel == LogLevel::HIGH) && !pass)
+	{
+		logString += "Test failure message: " + message + ". ";
+	}
+
+	//If the log level is HIGH add the start and end times to the log string
+	if (logLevel == LogLevel::HIGH)
+	{
+		logString += "Test run time: " + std::to_string(runTime) + "ms. ";
+	}
+
+	report << logString << std::endl;
 }
 
 std::string TestHarness::ToString()
@@ -65,16 +102,14 @@ std::string TestHarness::ToString()
 }
 
 void TestHarness::AddTestToSuite(std::function<bool()> callable)
-//add function pointer to TestSuite vector
 {
 	TestSuite.push_back(callable);
 }
 
-template <typename Callable>
-void TestHarness::AddTestToSuite(Callable& co)
-//overloaded AddTestToSuite function. add functor to TestSuite vector
+//template <typename Callable>
+void TestHarness::AddTestToSuite(bool(__cdecl * co)())
 {
-	TestSuite.push_back(co);
+	PointerTestSuite.push_back(co);
 }
 
 void TestHarness::ResetTestSuite()
@@ -83,11 +118,3 @@ void TestHarness::ResetTestSuite()
 	this->TestSuite.clear();
 }
 
-void TestHarness::dll_Loader(std::vector<std::string> dll_List)
-{	
-	for (auto &v : dll_List)
-	{
-		/*loadlibrary;
-		AddTestToSuite(ITestFunction);*/
-	}
-}
