@@ -104,9 +104,14 @@ std::vector<std::string> Executive::ParseXML(std::string test_file)
 		}
 	}
 
-	for (int i = 0; i<parsed_vector.size(); i++)
+	/*for (int i = 0; i<parsed_vector.size(); i++)
 	{
 		cout << parsed_vector[i] << endl;
-	}
+	}*/
 	return parsed_vector;
+}
+
+void Executive::displayTestResults()
+{
+	std::cout << this->testHarness.ToString() << std::endl;
 }
