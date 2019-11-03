@@ -3,9 +3,6 @@
 ## Team Members:
 Cade Archer, Michael Cheng, Sameer Rizvi, Bryan Ulrich
 
-## Travis CI Build Status: [![Build Status](https://travis-ci.com/archerc56/CSE687_OOD.svg?branch=master)](https://travis-ci.com/archerc56/CSE687_OOD)
-Compiles the project using both clang and g++ compilers
-
 ## Project Requirements
 1.	Shall be prepared using the latest version of Visual Studio, and written in the standard C++ programming language, using the standard C++ libraries.
 2.	Shall use Visual Studio, Community Edition available at no cost.
@@ -18,7 +15,6 @@ Compiles the project using both clang and g++ compilers
 9.	The Executive package shall provide processing to demonstrate that these requirements are met, by using facilities of the TestHarness
 
 ## Execution Output: 
-
 ```
 TODO
 ```
