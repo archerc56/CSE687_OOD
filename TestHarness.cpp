@@ -9,7 +9,7 @@ Last Updated:	11/2/2019 7:08 PM
 Notes:
 //**************************************************************************************************************************/
 #include "TestHarness.h"
-
+#include <thread>
 
 TestHarness::TestHarness()
 {
@@ -32,7 +32,7 @@ float TestHarness::convertClockTicksToMilliSeconds(clock_t ticks) {
 
 void TestHarness::Executor()
 {
-	int testNum = 1;
+	
 	for (auto& i : this->PointerTestSuite/*TestSuite*/) //iterate through TestSuite vector contents
 	{
 		float x, y;
@@ -43,6 +43,9 @@ void TestHarness::Executor()
 			//invoke callable objects within try block
 		{
 			//invoke callable object
+			//thread here for each callable object, print thread.
+			std::thread::id threadID = std::this_thread::get_id();
+			std::cout << threadID;
 			i();
 
 			//store end time
@@ -68,7 +71,7 @@ void TestHarness::Executor()
 			Log(0, "Unknown Exception Thrown!", runTime, testNum);
 		}
 
-		testNum++;
+		this->testNum++;
 
 	}
 }
@@ -123,9 +126,11 @@ void TestHarness::AddTestToSuite(bool(__cdecl * co)())
 }
 
 void TestHarness::ResetTestSuite()
-//remove all elements from TestSuite vector. TestSuite.size() == 0
+//remove all elements from TestSuite vector
 {
+	this->PointerTestSuite.clear();
 	this->TestSuite.clear();
+	//this->report.str(std::string());
 }
 
 

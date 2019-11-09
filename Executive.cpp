@@ -71,6 +71,8 @@ void Executive::clearHarness_andFreeDLL()
 		FreeLibrary(v);
 		std::cout << "Library at mem Location " << v << " Freed" << std::endl;
 	}
+
+	this->all_DLL_MemoryLocations.clear();
 }
 
 std::string Executive::removeSub(std::string s, std::string to_remove)

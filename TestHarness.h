@@ -50,5 +50,6 @@ private:
 	std::vector<bool(__cdecl *)()> PointerTestSuite;				//vector of function pointers
 	std::stringstream report;										//final report of all passes and fails.  when log() is called this string is appended
 	float convertClockTicksToMilliSeconds(clock_t ticks);
+	int testNum = 1;
 };
 #endif
