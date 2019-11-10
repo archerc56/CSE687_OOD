@@ -44,9 +44,14 @@ void TestHarness::Executor()
 		{
 			//invoke callable object
 			//thread here for each callable object, print thread.
-			std::thread::id threadID = std::this_thread::get_id();
-			std::cout << threadID;
+			/*std::thread::id threadID = std::this_thread::get_id();
+			std::cout << threadID;*/
+
+		//**** 
+			//These callable objects need to be ran in a new thread of type bool(__cdecl *)()
+			//a exception must be returned using an exception_ptr
 			i();
+		//****
 
 			//store end time
 			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
