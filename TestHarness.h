@@ -39,17 +39,19 @@ public:
 	void Log(bool pass, std::string, float runTime, int testNum);	//logs the result
 	
 	//template <typename Callable>
-	void AddTestToSuite(bool(__cdecl * co)());						//adds the test case to testsuite
+	//void AddTestToSuite(bool(__cdecl * co)());						//adds the test case to testsuite
 	
 	void AddTestToSuite(std::function<bool()> callable);			//adds test case to testsuite
 	void ResetTestSuite();											//resets the test suite
+	void ResetTestResult();
 
 private:
 	LogLevel logLevel = LogLevel::HIGH;
 	std::vector<std::function<bool()>> TestSuite;					//vector of function onject
-	std::vector<bool(__cdecl *)()> PointerTestSuite;				//vector of function pointers
+	std::vector<std::function<bool()>> PointerTestSuite;			//vector of function pointers
+	//std::vector<bool(__cdecl *)()> PointerTestSuite;
 	std::stringstream report;										//final report of all passes and fails.  when log() is called this string is appended
 	float convertClockTicksToMilliSeconds(clock_t ticks);
-	int testNum = 1;
+	//int testNum = 1;
 };
 #endif

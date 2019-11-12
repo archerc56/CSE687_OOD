@@ -32,12 +32,14 @@ float TestHarness::convertClockTicksToMilliSeconds(clock_t ticks) {
 
 void TestHarness::Executor()
 {
-	
+	int testNum = 1;
+
 	for (auto& i : this->PointerTestSuite/*TestSuite*/) //iterate through TestSuite vector contents
 	{
 		float x, y;
 		float startTime = convertClockTicksToMilliSeconds(clock());
 		float runTime;
+		
 
 		try
 			//invoke callable objects within try block
@@ -76,7 +78,7 @@ void TestHarness::Executor()
 			Log(0, "Unknown Exception Thrown!", runTime, testNum);
 		}
 
-		this->testNum++;
+		testNum++;
 
 	}
 }
@@ -119,13 +121,13 @@ std::string TestHarness::ToString()
 	return returnString;
 }
 
-void TestHarness::AddTestToSuite(std::function<bool()> callable)
-{
-	TestSuite.push_back(callable);
-}
+//void TestHarness::AddTestToSuite(bool(__cdecl * co)())
+//{
+//	PointerTestSuite.push_back(callable);
+//}
 
 //template <typename Callable>
-void TestHarness::AddTestToSuite(bool(__cdecl * co)())
+void TestHarness::AddTestToSuite(std::function<bool()> co)
 {
 	PointerTestSuite.push_back(co);
 }
@@ -135,7 +137,9 @@ void TestHarness::ResetTestSuite()
 {
 	this->PointerTestSuite.clear();
 	this->TestSuite.clear();
-	//this->report.str(std::string());
 }
 
-
+void TestHarness::ResetTestResult()
+{
+	this->report.str(std::string());
+}

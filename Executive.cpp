@@ -72,6 +72,8 @@ void Executive::clearHarness_andFreeDLL()
 		std::cout << "Library at mem Location " << v << " Freed" << std::endl;
 	}
 
+	std::cout << std::endl << std::endl;
+
 	this->all_DLL_MemoryLocations.clear();
 }
 
@@ -128,4 +130,9 @@ std::vector<std::string> Executive::ParseXML(std::string test_file)
 void Executive::displayTestResults()
 {
 	std::cout << this->testHarness.ToString() << std::endl;
+}
+
+void Executive::clearTestResults()
+{
+	this->testHarness.ResetTestResult();
 }

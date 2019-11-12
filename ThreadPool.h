@@ -30,7 +30,7 @@ private:
 	std::vector<std::thread> Threads;				//vector of threads that are created once then set to wait
 	std::mutex eventMutex;							//mutex used in unique lock to create critical sections
 	std::condition_variable eventVar;				//object used to lock all thread in wating state; and also waking a thread at one time
-	bool stopFlag = false;								//stop flag
+	bool stopFlag = false;							//stop flag
 	std::queue<std::function<void()>> qTasks;		//queue of callable objects
 
 	void initialize(std::size_t num_ofThreads);		//initialize function to spin up threads 
