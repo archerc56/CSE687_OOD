@@ -32,16 +32,18 @@ float TestHarness::convertClockTicksToMilliSeconds(clock_t ticks) {
 
 void TestHarness::Executor()
 {
-	this->testNum = 1;
+	this->testNum = 0;
+	std::vector<std::thread> threadVec;
 
 	for (auto& i : this->PointerTestSuite/*TestSuite*/) //iterate through TestSuite vector contents
 	{
 
 		//***This needs to be threaded
-		this->ThreadedExecutor(i);
+		
+		threadVec.emplace_back(std::thread(&TestHarness::ThreadedExecutor, this, i));
 		
 		//******
-		
+
 		
 		
 		//float x, y;
@@ -87,56 +89,68 @@ void TestHarness::Executor()
 		//	Log(0, "Unknown Exception Thrown!", runTime, this->testNum);
 		//}
 
-		this->testNum++;
+		//this->testNum++;
 
 	}
+
+	for (auto& t : threadVec)
+	{
+		t.join();
+
+	}
+
 }
 
 void TestHarness::ThreadedExecutor(std::function<bool()> i)
 {
+	std::lock_guard<std::mutex> g(FunctionCall_Lock);
 
-		float x, y;
-		float startTime = convertClockTicksToMilliSeconds(clock());
-		float runTime;
+	this->testNum++;
+	float x, y;
+	float startTime = convertClockTicksToMilliSeconds(clock());
+	float runTime;
+	
+	std::cout << "-------------------------------------------------------\n";
+	std::thread::id threadID = std::this_thread::get_id();
+	std::cout << " Thread ID " << threadID << std::endl;
+
+	try
+		//invoke callable objects within try block
+	{
+		//invoke callable object
+		//thread here for each callable object, print thread.
+		/*std::thread::id threadID = std::this_thread::get_id();
+		std::cout << threadID;*/
+
+		//**** 
+		//These callable objects need to be ran in a new thread of type bool(__cdecl *)()
+		//a exception must be returned using an exception_ptr
+		i();
+		//****
 
 
-		try
-			//invoke callable objects within try block
-		{
-			//invoke callable object
-			//thread here for each callable object, print thread.
-			/*std::thread::id threadID = std::this_thread::get_id();
-			std::cout << threadID;*/
+		//store end time
+		runTime = convertClockTicksToMilliSeconds(clock() - startTime);
 
-			//**** 
-			//These callable objects need to be ran in a new thread of type bool(__cdecl *)()
-			//a exception must be returned using an exception_ptr
-			i();
-			//****
+		//log pass
+		Log(1, "Pass", runTime, this->testNum); //log pass since 1(true) is being passed in
+	}
+	catch (std::exception & e)
+	{
+		//store end time
+		runTime = convertClockTicksToMilliSeconds(clock() - startTime);
 
+		//log fail
+		Log(0, e.what(), runTime, this->testNum);
+	}
+	catch (/*std::bad_alloc & ba*/ ...)
+	{
+		//store end time
+		runTime = convertClockTicksToMilliSeconds(clock() - startTime);
 
-			//store end time
-			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
-
-			//log pass
-			Log(1, "Pass", runTime, this->testNum); //log pass since 1(true) is being passed in
-		}
-		catch (std::exception & e)
-		{
-			//store end time
-			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
-
-			//log fail
-			Log(0, e.what(), runTime, this->testNum);
-		}
-		catch (/*std::bad_alloc & ba*/ ...)
-		{
-			//store end time
-			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
-
-			//log fail
-			Log(0, "Unknown Exception Thrown!", runTime, this->testNum);
-		}
+		//log fail
+		Log(0, "Unknown Exception Thrown!", runTime, this->testNum);
+	}
 
 
 }

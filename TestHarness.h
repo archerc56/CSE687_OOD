@@ -21,6 +21,7 @@ Notes:
 #include <typeinfo>
 #include <fstream>
 #include <string>
+#include <mutex>
 #include <windows.h>
 
 class TestHarness
@@ -47,6 +48,7 @@ public:
 	void ResetTestResult();
 
 private:
+	std::mutex FunctionCall_Lock;
 	LogLevel logLevel = LogLevel::HIGH;
 	std::vector<std::function<bool()>> TestSuite;					//vector of function onject
 	std::vector<std::function<bool()>> PointerTestSuite;			//vector of function pointers
