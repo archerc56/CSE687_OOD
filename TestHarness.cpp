@@ -32,14 +32,73 @@ float TestHarness::convertClockTicksToMilliSeconds(clock_t ticks) {
 
 void TestHarness::Executor()
 {
-	int testNum = 1;
+	this->testNum = 1;
 
 	for (auto& i : this->PointerTestSuite/*TestSuite*/) //iterate through TestSuite vector contents
 	{
+
+		//***This needs to be threaded
+		this->ThreadedExecutor(i);
+		
+		//******
+		
+		
+		
+		//float x, y;
+		//float startTime = convertClockTicksToMilliSeconds(clock());
+		//float runTime;
+		//
+
+		//try
+		//	//invoke callable objects within try block
+		//{
+		//	//invoke callable object
+		//	//thread here for each callable object, print thread.
+		//	/*std::thread::id threadID = std::this_thread::get_id();
+		//	std::cout << threadID;*/
+
+		////**** 
+		//	//These callable objects need to be ran in a new thread of type bool(__cdecl *)()
+		//	//a exception must be returned using an exception_ptr
+		//	i();
+		////****
+
+
+		//	//store end time
+		//	runTime = convertClockTicksToMilliSeconds(clock() - startTime);
+
+		//	//log pass
+		//	Log(1, "Pass", runTime, this->testNum); //log pass since 1(true) is being passed in
+		//}
+		//catch (std::exception & e)
+		//{
+		//	//store end time
+		//	runTime = convertClockTicksToMilliSeconds(clock() - startTime);
+
+		//	//log fail
+		//	Log(0, e.what(), runTime, this->testNum);
+		//}
+		//catch (/*std::bad_alloc & ba*/ ...)
+		//{
+		//	//store end time
+		//	runTime = convertClockTicksToMilliSeconds(clock() - startTime);
+
+		//	//log fail
+		//	Log(0, "Unknown Exception Thrown!", runTime, this->testNum);
+		//}
+
+		this->testNum++;
+
+	}
+}
+
+void TestHarness::ThreadedExecutor(std::function<bool()> i)
+{
+
 		float x, y;
 		float startTime = convertClockTicksToMilliSeconds(clock());
 		float runTime;
-		
+
 
 		try
 			//invoke callable objects within try block
@@ -49,17 +108,18 @@ void TestHarness::Executor()
 			/*std::thread::id threadID = std::this_thread::get_id();
 			std::cout << threadID;*/
 
-		//**** 
+			//**** 
 			//These callable objects need to be ran in a new thread of type bool(__cdecl *)()
 			//a exception must be returned using an exception_ptr
 			i();
-		//****
+			//****
+
 
 			//store end time
 			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
 
 			//log pass
-			Log(1, "Pass", runTime, testNum); //log pass since 1(true) is being passed in
+			Log(1, "Pass", runTime, this->testNum); //log pass since 1(true) is being passed in
 		}
 		catch (std::exception & e)
 		{
@@ -67,7 +127,7 @@ void TestHarness::Executor()
 			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
 
 			//log fail
-			Log(0, e.what(), runTime, testNum);
+			Log(0, e.what(), runTime, this->testNum);
 		}
 		catch (/*std::bad_alloc & ba*/ ...)
 		{
@@ -75,12 +135,10 @@ void TestHarness::Executor()
 			runTime = convertClockTicksToMilliSeconds(clock() - startTime);
 
 			//log fail
-			Log(0, "Unknown Exception Thrown!", runTime, testNum);
+			Log(0, "Unknown Exception Thrown!", runTime, this->testNum);
 		}
 
-		testNum++;
 
-	}
 }
 
 void TestHarness::Log(bool pass, std::string message, float runTime, int testNum)
