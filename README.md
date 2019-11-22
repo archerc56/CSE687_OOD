@@ -22,6 +22,7 @@ Cade Archer, Michael Cheng, Sameer Rizvi, Bryan Ulrich
 
 
 ## Execution Output: 
+To test our application, we create the server and two clients. Each client runs their own set of tests defined in test1.xml and test2.xml (In the ExecutionServer folder). Client 1, listed as localhost:9891, will run the TestAdd, TestAllocate, TestBadWeakPtr test DLLs. Client 2, listed as localhost:9892, will run the TestBadFunctionCall and TestBadWeakPtr test DLLs. 
 
 ```
 Executing localhost:9892's tests
