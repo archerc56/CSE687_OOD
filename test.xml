@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<xs:element name="test_name" type="xs:string"/>
-<test_name>test1</test_name>
-<test_name>TestAdd</test_name>
-<test_name>TestAllocate</test_name>
-<test_name>TestBadAlloc</test_name>
-<test_name>TestBadFunctionCall</test_name>
-<test_name>TestBadWeakPtr</test_name>
-
