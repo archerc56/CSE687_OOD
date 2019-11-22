@@ -1,1 +1,5 @@
-﻿
+﻿  Comm.cpp
+C:\Users\Jace\Documents\CSE687_OOD\ExecutionServer\Executive.cpp(111,19): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Jace\Documents\CSE687_OOD\ExecutionServer\ThreadPool.cpp(43,20): warning C4018: '<=': signed/unsigned mismatch
+C:\Users\Jace\Documents\CSE687_OOD\ExecutionServer\ThreadPool.cpp(31): warning C4715: 'ThreadPool::get_isQ_Empty': not all control paths return a value
+  MsgPassingComm.vcxproj -> C:\Users\Jace\Documents\CSE687_OOD\Debug\MsgPassingComm.exe

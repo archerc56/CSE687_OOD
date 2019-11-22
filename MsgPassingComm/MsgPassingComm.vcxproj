@@ -155,6 +155,9 @@
     <ProjectReference Include="..\Cpp11-BlockingQueue\Cpp11-BlockingQueue.vcxproj">
       <Project>{38a1d03d-7747-4f79-9539-358f1d1d8dd7}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\ExecutionServer\ExecutionServer.vcxproj">
+      <Project>{103e6f04-fa43-4028-a675-bba649bcd239}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Message\Message.vcxproj">
       <Project>{4133d528-ab6d-4ccd-af37-67536f36154c}</Project>
     </ProjectReference>

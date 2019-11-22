@@ -1,0 +1,15 @@
+﻿  Executive.cpp
+  Functor.cpp
+  TestHarness.cpp
+C:\Users\Jace\Downloads\Comm\ExecutionServer\Executive.cpp(111,19): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Jace\Downloads\Comm\ExecutionServer\TestHarness.cpp(30,42): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\Jace\Downloads\Comm\ExecutionServer\TestHarness.cpp(133,53): warning C4244: 'argument': conversion from 'float' to 'clock_t', possible loss of data
+C:\Users\Jace\Downloads\Comm\ExecutionServer\TestHarness.cpp(141,53): warning C4244: 'argument': conversion from 'float' to 'clock_t', possible loss of data
+C:\Users\Jace\Downloads\Comm\ExecutionServer\TestHarness.cpp(149,53): warning C4244: 'argument': conversion from 'float' to 'clock_t', possible loss of data
+C:\Users\Jace\Downloads\Comm\ExecutionServer\TestHarness.cpp(109,11): warning C4101: 'y': unreferenced local variable
+  ThreadPool.cpp
+C:\Users\Jace\Downloads\Comm\ExecutionServer\TestHarness.cpp(109,8): warning C4101: 'x': unreferenced local variable
+  Generating Code...
+C:\Users\Jace\Downloads\Comm\ExecutionServer\ThreadPool.cpp(43,20): warning C4018: '<=': signed/unsigned mismatch
+C:\Users\Jace\Downloads\Comm\ExecutionServer\ThreadPool.cpp(31): warning C4715: 'ThreadPool::get_isQ_Empty': not all control paths return a value
+  ExecutionServer.vcxproj -> C:\Users\Jace\Downloads\Comm\Debug\ExecutionServer.lib
