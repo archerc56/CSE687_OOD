@@ -1,20 +1,25 @@
-/////////////////////////////////////////////////////////////////////
-// Comm.h - message-passing communication facility                 //
-// ver 1.0                                                         //
-// Jim Fawcett, CSE687-OnLine Object Oriented Design, Fall 2017    //
-/////////////////////////////////////////////////////////////////////
-
 #include "Comm.h"
 #include "../Logger/Logger.h"
 #include "../Utilities/Utilities.h"
+#include "../ExecutionServer/Executive.cpp"
+#include "../ExecutionServer/ThreadPool.cpp"
 #include "../Cpp11-BlockingQueue/Cpp11-BlockingQueue.h"
 #include <iostream>
 #include <functional>
 #include <conio.h>
 
+
 using namespace MsgPassingCommunication;
 using namespace Sockets;
 using SUtils = Utilities::StringHelper;
+void testRequest(std::string);
+
+void printThreadID();
+
+Executive e;
+int totalRequests = 3;
+int threadRequestCount = 1;
+std::mutex mux;
 
 //----< constructor sets port >--------------------------------------
 
@@ -184,9 +189,7 @@ public:
       }
       Message msg = Message::fromString(msgString);
       StaticLogger<1>::write("\n  -- " + clientHandlerName + " RecvThread read message: " + msg.name());
-      //std::cout << "\n  -- " + clientHandlerName + " RecvThread read message: " + msg.name();
       pQ_->enQ(msg);
-      //std::cout << "\n  -- message enqueued in rcvQ";
       if (msg.command() == "quit")
         break;
     }
@@ -240,171 +243,6 @@ std::string Comm::name()
 //----< test stub >--------------------------------------------------
 
 #ifdef TEST_COMM
-
-/////////////////////////////////////////////////////////////////////
-// Test #1 - Demonstrates Sender and Receiver operations
-
-void DemoSndrRcvr(const std::string& machineName)
-{
-  SUtils::title("Demonstrating Sender and Receiver classes");
-
-  SocketSystem ss;
-  EndPoint ep1;
-  ep1.port = 9091;
-  ep1.address = "localhost";
-  Receiver rcvr1(ep1);
-  BlockingQueue<Message>* pQ1 = rcvr1.queue();
-
-  ClientHandler ch1(pQ1);
-  rcvr1.start(ch1);
-
-  EndPoint ep2;
-  ep2.port = 9092;
-  ep2.address = "localhost";
-  Receiver rcvr2(ep2);
-  BlockingQueue<Message>* pQ2 = rcvr2.queue();
-
-  ClientHandler ch2(pQ2);
-  rcvr2.start(ch2);
-
-  Sender sndr;
-  sndr.start();
-  bool connected = sndr.connect(ep1);
-  Message msg;
-  msg.name("msg #1");
-  msg.to(ep1);
-  msg.from(msg.to());
-  msg.command("do it");
-  msg.attribute("bodyAttrib", "zzz");
-  StaticLogger<1>::flush();
-  std::cout << "\n  sndr in main posting message:  " << msg.name();
-  sndr.postMessage(msg);
-
-  msg.name("msg #2");
-  msg.to(EndPoint(machineName, 9092));
-  StaticLogger<1>::flush();
-  std::cout << "\n  sndr in main posting message:  " << msg.name();
-  sndr.postMessage(msg);
-
-  Message rcvdMsg = rcvr1.getMessage();  // blocks until message arrives
-  StaticLogger<1>::flush();
-  std::cout << "\n  rcvr1 in main received message: " << rcvdMsg.name();
-  rcvdMsg.show();
-
-  rcvdMsg = rcvr2.getMessage();  // blocks until message arrives
-  StaticLogger<1>::flush();
-  std::cout << "\n  rcvr2 in main received message: " << rcvdMsg.name();
-  rcvdMsg.show();
-
-  SUtils::title("Sending message to EndPoint that doesn't exist");
-
-  msg.name("msg #3");
-  msg.to(EndPoint("DoesNotExist", 1111));  // Unknown endpoint - should fail
-  StaticLogger<1>::flush();
-  std::cout << "\n  sndr in main posting message:  " << msg.name();
-  msg.show();
-  sndr.postMessage(msg);                   // will never reach rcvr
-
-  msg.name("msg #4");
-  msg.to(EndPoint("localhost", 9091));
-  StaticLogger<1>::flush();
-  std::cout << "\n  sndr in main posting message:  " << msg.name();
-  sndr.postMessage(msg);                  // this should succeed
-  StaticLogger<1>::flush();
-  rcvdMsg = rcvr1.getMessage();
-  std::cout << "\n  rcvr1 in main received message: " << rcvdMsg.name();
-  rcvdMsg.show();
-
-  rcvr1.stop();
-  rcvr2.stop();
-  sndr.stop();
-  StaticLogger<1>::flush();
-
-  std::cout << "\n  press enter to quit DemoSndrRcvr";
-  _getche();
-  std::cout << "\n";
-}
-
-/////////////////////////////////////////////////////////////////////
-// Test #2 - Demonstrates Comm class using a single thread
-//           sending and receiving messages from two Comm
-//           instances.
-
-void DemoCommClass(const std::string& machineName)
-{
-  SUtils::title("Demonstrating Comm class");
-
-  SocketSystem ss;
-
-  EndPoint ep1("localhost", 9191);
-  Comm comm1(ep1, "comm1");
-  comm1.start();
-
-  EndPoint ep2("localhost", 9192);
-  Comm comm2(ep2, "comm2");
-  comm2.start();
-
-  // send msg from comm1 to comm1
-  Message msg;
-  msg.name("msg #1");
-  msg.to(ep1);
-  msg.from(ep1);
-  StaticLogger<1>::flush();
-  std::cout << "\n  comm1 in main posting message:   " << msg.name();
-  comm1.postMessage(msg);
-  msg = comm1.getMessage();
-  StaticLogger<1>::flush();
-  std::cout << "\n  comm1 in main received message:  " << msg.name();
-  msg.show();
-
-  // send msg from comm1 to comm2
-  msg.name("msg #2");
-  msg.from(ep1);
-  msg.to(ep2);
-  StaticLogger<1>::flush();
-  std::cout << "\n  comm1 in main posting message:  " << msg.name();
-  comm1.postMessage(msg);
-  msg = comm2.getMessage();
-  StaticLogger<1>::flush();
-  std::cout << "\n  comm2 in main received message: " << msg.name();
-  msg.show();
-
-  // send msg from comm2 to comm1
-  msg.name("msg #3");
-  msg.to(ep1);
-  msg.from(ep2);
-  StaticLogger<1>::flush();
-  std::cout << "\n  comm2 in main posting message:  " << msg.name();
-  comm2.postMessage(msg);
-  msg = comm1.getMessage();
-  StaticLogger<1>::flush();
-  std::cout << "\n  comm1 in main received message: " << msg.name();
-  msg.show();
-
-  // send msg from comm2 to comm2
-  msg.name("msg #4");
-  msg.from(ep2);
-  msg.to(ep2);
-  StaticLogger<1>::flush();
-  std::cout << "\n  comm2 in main posting message:  " << msg.name();
-  comm2.postMessage(msg);
-  msg = comm2.getMessage();
-  StaticLogger<1>::flush();
-  std::cout << "\n  comm2 in main received message: " << msg.name();
-  msg.show();
-
-  comm1.stop();
-  comm2.stop();
-  StaticLogger<1>::flush();
-  std::cout << "\n  press enter to quit DemoComm";
-  _getche();
-}
-/////////////////////////////////////////////////////////////////////
-// Test #3 - Demonstrate server with two concurrent clients
-//           sending and receiving messages
-
-//----< handler for first concurrent client >------------------------
-
 void ThreadProcClnt1()
 {
   Comm comm(EndPoint("localhost", 9891), "client1Comm");
@@ -412,106 +250,112 @@ void ThreadProcClnt1()
   EndPoint serverEP("localhost", 9890);
   EndPoint clientEP("localhost", 9891);
   size_t IMax = 3;
-  for (size_t i = 0; i < IMax; ++i)
-  {
-    Message msg(serverEP, clientEP);
-    msg.name("client #1 : msg #" + Utilities::Converter<size_t>::toString(i));
-    std::cout << "\n  " + comm.name() + " posting:  " << msg.name();
-    comm.postMessage(msg);
-    Message rply = comm.getMessage();
-    std::cout << "\n  " + comm.name() + " received: " << rply.name();
-    ::Sleep(100);
-  }
-  ::Sleep(200);
+  Message msg(serverEP, clientEP);
+  msg.name("client #1 tests");
+  msg.file("test1.xml");
+  comm.postMessage(msg);
+
+  Message rply = comm.getMessage();
+  //::Sleep(200);
   Message stop;
   stop.name("stop");
   stop.to(serverEP);
   stop.command("stop");
   comm.postMessage(stop);
 }
-//----< handler for 2nd concurrent client >--------------------------
 
 void ThreadProcClnt2()
 {
-  Comm comm(EndPoint("localhost", 9892), "client2Comm");
-  comm.start();
-  EndPoint serverEP("localhost", 9890);
-  EndPoint clientEP("localhost", 9892);
-  size_t IMax = 3;
-  for (size_t i = 0; i < IMax; ++i)
-  {
-    Message msg(serverEP, clientEP);
-    msg.name("client #2 : msg #" + Utilities::Converter<size_t>::toString(i));
-    std::cout << "\n  " + comm.name() + " posting:  " << msg.name();
-    comm.postMessage(msg);
-    Message rply = comm.getMessage();
-    std::cout << "\n  " + comm.name() + " received: " << rply.name();
-  }
+	Comm comm(EndPoint("localhost", 9892), "client2Comm");
+	comm.start();
+	EndPoint serverEP("localhost", 9890);
+	EndPoint clientEP("localhost", 9892);
+	size_t IMax = 3;
+	Message msg(serverEP, clientEP);
+	msg.name("client #2 tests");
+	msg.file("test2.xml");
+	comm.postMessage(msg);
+	Message rply = comm.getMessage();
+	//::Sleep(200);
+	Message stop;
+	stop.name("stop");
+	stop.to(serverEP);
+	stop.command("stop");
+	comm.postMessage(stop);
 }
-//----< server demonstrates two-way asynchronous communication >-----
-/*
-*  - One server receiving messages and sending replies to
-*    two concurrent clients.
-*/
-void DemoClientServer()
+
+void testRequest(std::string request)
 {
-  SUtils::title("Demonstrating Client-Server - one server with two concurrent clients");
+	std::unique_lock<std::mutex> lock{ mux };
+	e.DLLharnessLoader(request);
+	e.runHarness();
+	e.displayTestResults();
 
-  SocketSystem ss;
+	e.clearTestResults();
 
-  EndPoint serverEP("localhost", 9890);
-  EndPoint clientEP("localhost", 9891);
-  Comm comm(serverEP, "serverComm");
-  comm.start();
-  std::thread t1(ThreadProcClnt1);
-  t1.detach();
-  std::thread t2(ThreadProcClnt2);
-  t2.detach();
+	e.clearHarness_andFreeDLL();
 
-  Message msg, rply;
-  rply.name("reply");
-  size_t count = 0;
-  while (true)
-  {
-    msg = comm.getMessage();
-    std::cout << "\n  " + comm.name() + " received message: " << msg.name();
-    //msg.show();
-    rply.to(msg.from());
-    rply.from(serverEP);
-    rply.name("server reply #" + Utilities::Converter<size_t>::toString(++count) + " to " + msg.from().toString());
-    //rply.show();
-    comm.postMessage(rply);
-    if (msg.command() == "stop")
-    {
-      break;
-    }
-  }
-  comm.stop();
-  StaticLogger<1>::flush();
-  std::cout << "\n  press enter to quit DemoClientServer";
-  _getche();
+	totalRequests--;
+
+	threadRequestCount++;
+}
+/*
+* Server will take in XML messages, execute them, and then return the logged results
+*
+*/
+void TestExecutorServer()
+{
+	EndPoint serverEP("localhost", 9890);
+	Comm comm(serverEP, "serverComm");
+	comm.start();
+	Message msg, rply;
+	rply.name("reply");
+	size_t count = 0;
+	ThreadPool tp(6);
+	while (true)
+	{
+		msg = comm.getMessage();
+		if (msg.command() != "stop") {
+			std::cout << "Executing " + msg.from().toString() + "'s tests" << std::endl << std::endl;
+		}
+		tp.enqueue(std::bind(testRequest, msg.file()));
+		rply.to(msg.from());
+		rply.from(serverEP);
+		comm.postMessage(rply);
+		if (msg.command() == "stop")
+		{
+			break;
+		}
+	}
+	comm.stop();
+	StaticLogger<1>::flush();
+
 }
 
 Cosmetic cosmetic;
 
 int main()
 {
-  SUtils::Title("Demo of Message-Passing Communication");
-  Utilities::putline();
-
   StaticLogger<1>::attach(&std::cout);
+  SocketSystem ss;
 
-  ///////////////////////////////////////////////////////////////////
-  // remove comment on line below to show many of the gory details
-  //
-  //StaticLogger<1>::start();
+  EndPoint serverEP("localhost", 9890);
+  EndPoint clientEP("localhost", 9891); 
 
-  ///////////////////////////////////////////////////////////////////
-  // if you uncomment the lines below, you will run all demos
+  //Note: To fully show the of this tool, we would create separate exe's to run both threads
+  //However to make testing faster, we've combined them all into a single exe
 
-  //DemoSndrRcvr("Odin");  // replace "Odin" with your machine name
-  //DemoCommClass("Odin");
-  DemoClientServer();
+  
+  std::thread t1(ThreadProcClnt1);
+  t1.detach();
+
+  std::thread t2(ThreadProcClnt2);
+  t2.detach();
+
+  //Start execution server
+  TestExecutorServer();
+
+  StaticLogger<1>::flush();
 
   return 0;
 }

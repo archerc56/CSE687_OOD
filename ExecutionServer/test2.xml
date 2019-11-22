@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<xs:element name="test_name" type="xs:string"/>
+<test_name>TestBadFunctionCall</test_name>
+<test_name>TestBadWeakPtr</test_name>
+

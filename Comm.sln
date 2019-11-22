@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MsgPassingComm", "MsgPassingComm\MsgPassingComm.vcxproj", "{6E58E051-CC07-4D7F-92A4-06A117A79CA7}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cpp11-BlockingQueue", "Cpp11-BlockingQueue\Cpp11-BlockingQueue.vcxproj", "{38A1D03D-7747-4F79-9539-358F1D1D8DD7}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Message", "Message\Message.vcxproj", "{4133D528-AB6D-4CCD-AF37-67536F36154C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExecutionServer", "ExecutionServer\ExecutionServer.vcxproj", "{103E6F04-FA43-4028-A675-BBA649BCD239}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +86,16 @@ Global
 		{4133D528-AB6D-4CCD-AF37-67536F36154C}.Release|x64.Build.0 = Release|x64
 		{4133D528-AB6D-4CCD-AF37-67536F36154C}.Release|x86.ActiveCfg = Release|Win32
 		{4133D528-AB6D-4CCD-AF37-67536F36154C}.Release|x86.Build.0 = Release|Win32
+		{103E6F04-FA43-4028-A675-BBA649BCD239}.Debug|ARM.ActiveCfg = Debug|Win32
+		{103E6F04-FA43-4028-A675-BBA649BCD239}.Debug|x64.ActiveCfg = Debug|x64
+		{103E6F04-FA43-4028-A675-BBA649BCD239}.Debug|x64.Build.0 = Debug|x64
+		{103E6F04-FA43-4028-A675-BBA649BCD239}.Debug|x86.ActiveCfg = Debug|Win32
+		{103E6F04-FA43-4028-A675-BBA649BCD239}.Debug|x86.Build.0 = Debug|Win32
+		{103E6F04-FA43-4028-A675-BBA649BCD239}.Release|ARM.ActiveCfg = Release|Win32
+		{103E6F04-FA43-4028-A675-BBA649BCD239}.Release|x64.ActiveCfg = Release|x64
+		{103E6F04-FA43-4028-A675-BBA649BCD239}.Release|x64.Build.0 = Release|x64
+		{103E6F04-FA43-4028-A675-BBA649BCD239}.Release|x86.ActiveCfg = Release|Win32
+		{103E6F04-FA43-4028-A675-BBA649BCD239}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
