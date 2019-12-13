@@ -1,0 +1,6 @@
+< ? xml version = "1.0" ? >
+<xs:element name = "test_name" type = "xs:string" / >
+<test_name>test1</test_name>
+<test_name>test2</test_name>
+<test_name>test3</test_name>
+<test_name>test4</test_name>
